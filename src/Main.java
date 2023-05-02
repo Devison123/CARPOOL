@@ -2,26 +2,29 @@ import java.sql.*;
 import java.util.Scanner;
 public class main {
     static Scanner scanner = new Scanner(System.in);
-    static void login(Connection connection) throws SQLException{
+    static String username;
+    static boolean login(Connection connection) throws SQLException{
         System.out.println("Welcome to carpooling app");
         System.out.println("LOGIN");
         System.out.print("Enter username: ");
-        String username = scanner.nextLine();
+        username = scanner.nextLine();
         if(!User.checkUsernameExists(connection,username)){
             System.out.print("Username does not exists");
+            return false;
         }else{
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
         if(User.checkPassword(connection, username, password)){
             System.out.println("Signed in successfully");
-            User.profile(connection, username).display();;
+            // User.profile(connection, username).display();
+            return true;
         }else{
             System.out.println("INCORRECT PASSWORD");
+            return false;
         }
         }
     }
     static void register(Connection connection) throws SQLException{
-        String username;
         System.out.println("REGISTER");
         while(true){
             System.out.print("Enter username: ");
@@ -59,6 +62,23 @@ public class main {
             // e.printStackTrace();
         }
         login(connection);
+        // if(){
+        //     System.out.print("Enter car model: ");
+        //     String carModel = scanner.nextLine();
+        //     System.out.print("Enter start location: ");
+        //     String startLocation = scanner.nextLine();
+        //     System.out.print("Enter end location: ");
+        //     String endLocation = scanner.nextLine();
+        //     System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
+        //     Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
+        //     System.out.print("Enter available seats: ");
+        //     int availableSeats = scanner.nextInt();
+        //     System.out.print("Enter luggage space (true or false): ");
+        //     boolean luggageSpace = scanner.nextBoolean();
+        //     Trip newTrip = new Trip(username,carModel, startLocation, endLocation, startTime, availableSeats, luggageSpace);
+        //     newTrip.save(connection);
+        //     System.out.println("New trip created");
+        // }
     }
 }
 
