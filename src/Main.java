@@ -46,7 +46,37 @@ public class main {
             newUser.save(connection);
             System.out.println("Registered successfully");
     }
+    static void addtrip(Connection connection) throws SQLException{
+        System.out.print("Enter car model: ");
+            String carModel = scanner.nextLine();
+            System.out.print("Enter start location: ");
+            String startLocation = scanner.nextLine();
+            System.out.print("Enter end location: ");
+            String endLocation = scanner.nextLine();
+            System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
+            Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
+            System.out.print("Enter available seats: ");
+            int availableSeats = scanner.nextInt();
+            System.out.print("Enter luggage space (true or false): ");
+            boolean luggageSpace = scanner.nextBoolean();
+            Trip newTrip = new Trip(username,carModel, startLocation, endLocation, startTime, availableSeats, luggageSpace);
+            newTrip.save(connection);
+            System.out.println("New trip created");
+    }
+        static void createBooking(Connection connection) throws SQLException {
+        // Take input from the user for tripId, riderId, and numSeats
+        System.out.print("Enter the trip ID: ");
+        int tripId = scanner.nextInt();
+        System.out.print("Enter the number of seats: ");
+        int numSeats = scanner.nextInt();
+        scanner.close();
 
+        // Create a new Booking object with the input values
+        Booking booking = new Booking(tripId, username ,numSeats);
+
+        // Save the booking to the database and set the bookingId field
+        booking.save(connection);
+    }
     public static void main(String[] args) throws SQLException {
         Connection connection = null;
         try {
@@ -61,24 +91,10 @@ public class main {
             System.out.println("Error: Could not connect to the database");
             // e.printStackTrace();
         }
-        login(connection);
-        // if(){
-        //     System.out.print("Enter car model: ");
-        //     String carModel = scanner.nextLine();
-        //     System.out.print("Enter start location: ");
-        //     String startLocation = scanner.nextLine();
-        //     System.out.print("Enter end location: ");
-        //     String endLocation = scanner.nextLine();
-        //     System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
-        //     Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
-        //     System.out.print("Enter available seats: ");
-        //     int availableSeats = scanner.nextInt();
-        //     System.out.print("Enter luggage space (true or false): ");
-        //     boolean luggageSpace = scanner.nextBoolean();
-        //     Trip newTrip = new Trip(username,carModel, startLocation, endLocation, startTime, availableSeats, luggageSpace);
-        //     newTrip.save(connection);
-        //     System.out.println("New trip created");
-        // }
+        if(login(connection)){
+            createBooking(connection);
+            addtrip(connection);
+        }
     }
 }
 
