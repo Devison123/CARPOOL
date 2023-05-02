@@ -75,11 +75,10 @@ public class Database {
         return rs;
     }
     // Booking-related methods
-public boolean createBooking(String username, int tripId, int numPassengers) throws SQLException {
+public boolean createBooking(String username, int numPassengers) throws SQLException {
     // check if trip exists and has available seats
     String checkTripSql = "SELECT available_seats FROM Trips WHERE trip_id = ?";
     PreparedStatement checkTripStmt = conn.prepareStatement(checkTripSql);
-    checkTripStmt.setInt(1, tripId);
     ResultSet checkTripRs = checkTripStmt.executeQuery();
     if (!checkTripRs.next()) {
         return false; // trip does not exist
@@ -93,15 +92,13 @@ public boolean createBooking(String username, int tripId, int numPassengers) thr
     String createBookingSql = "INSERT INTO Bookings (username, trip_id, num_passengers) VALUES (?, ?, ?)";
     PreparedStatement createBookingStmt = conn.prepareStatement(createBookingSql);
     createBookingStmt.setString(1, username);
-    createBookingStmt.setInt(2, tripId);
-    createBookingStmt.setInt(3, numPassengers);
+    createBookingStmt.setInt(2, numPassengers);
     int numRowsAffected = createBookingStmt.executeUpdate();
     
     // update available seats for trip
-    String updateTripSql = "UPDATE Trips SET available_seats = ? WHERE trip_id = ?";
+    String updateTripSql = "UPDATE Trips SET available_seats = ?";
     PreparedStatement updateTripStmt = conn.prepareStatement(updateTripSql);
     updateTripStmt.setInt(1, availableSeats - numPassengers);
-    updateTripStmt.setInt(2, tripId);
     updateTripStmt.executeUpdate();
     
     return numRowsAffected == 1;

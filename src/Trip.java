@@ -1,79 +1,76 @@
-class Trip {
-    int tripId;
-    String username;
-    String carModel;
-    String startLocation;
-    String endLocation;
-    LocalDateTime startTime;
-    int availableSeats;
-    boolean luggageSpace;
+// import java.sql.*;
+// import java.util.Scanner;
 
-    // constructor
-    Trip(String username, String carModel, String startLocation, String endLocation,
-         LocalDateTime startTime, int availableSeats, boolean luggageSpace) {
-        this.tripId = -1; // default value for a new trip
-        this.username = username;
-        this.carModel = carModel;
-        this.startLocation = startLocation;
-        this.endLocation = endLocation;
-        this.startTime = startTime;
-        this.availableSeats = availableSeats;
-        this.luggageSpace = luggageSpace;
-    }
+// public class Trip {
+//     private int tripId;
+//     private String carModel;
+//     private String startLocation;
+//     private String endLocation;
+//     private Timestamp startTime;
+//     private int availableSeats;
+//     private boolean luggageSpace;
 
-    // create a new trip
-    static void createTrip(String username, String carModel, String startLocation, String endLocation,
-                           LocalDateTime startTime, int availableSeats, boolean luggageSpace) {
-        // create a new trip object and insert it into the database
-        Trip trip = new Trip(username, carModel, startLocation, endLocation, startTime, availableSeats, luggageSpace);
-        Database.insertTrip(trip);
+//     public Trip(String carModel, String startLocation, String endLocation, Timestamp startTime, int availableSeats, boolean luggageSpace) {
+//         this.carModel = carModel;
+//         this.startLocation = startLocation;
+//         this.endLocation = endLocation;
+//         this.startTime = startTime;
+//         this.availableSeats = availableSeats;
+//         this.luggageSpace = luggageSpace;
+//     }
 
-        System.out.println("Trip created successfully.");
-    }
+//     public int getTripId() {
+//         return tripId;
+//     }
 
-    // search for available trips
-    static List<Trip> searchTrips(LocalDate dateOfTravel, String startLocation, String endLocation,
-                                  LocalDateTime startTime, int requiredSeats, boolean luggageSpace) {
-        // search the database for available trips based on the provided criteria
-        List<Trip> trips = Database.searchTrips(dateOfTravel, startLocation, endLocation,
-                                                       startTime, requiredSeats, luggageSpace);
+//     public void save(Connection connection) throws SQLException {
+//         PreparedStatement statement = connection.prepareStatement(
+//                 "INSERT INTO Trips (car_model, start_location, end_location, start_time, available_seats, luggage_space) VALUES (?, ?, ?, ?, ?, ?)",
+//                 Statement.RETURN_GENERATED_KEYS
+//         );
+//         statement.setString(1, this.carModel);
+//         statement.setString(2, this.startLocation);
+//         statement.setString(3, this.endLocation);
+//         statement.setTimestamp(4, this.startTime);
+//         statement.setInt(5, this.availableSeats);
+//         statement.setBoolean(6, this.luggageSpace);
+//         statement.executeUpdate();
+//         ResultSet resultSet = statement.getGeneratedKeys();
+//         if (resultSet.next()) {
+//             this.tripId = resultSet.getInt(1);
+//         }
+//         resultSet.close();
+//         statement.close();
+//     }
 
-        // filter the search results to show only trips within 5 hours of the searched trip
-        List<Trip> filteredTrips = new ArrayList<>();
-        for (Trip trip : trips) {
-            if (Math.abs(Duration.between(trip.startTime, startTime).toHours()) <= 5) {
-                filteredTrips.add(trip);
-            }
-        }
+//     public static void main(String[] args) {
+//         // Replace with your database URL, username, and password
+//         String url = "jdbc:mysql://localhost:3306/mydb";
+//         String user = "myuser";
+//         String password = "mypassword";
 
-        return filteredTrips;
-    }
+//         try (Connection connection = DriverManager.getConnection(url, user, password)) {
+//             Scanner scanner = new Scanner(System.in);
+//             System.out.print("Enter car model: ");
+//             String carModel = scanner.nextLine();
+//             System.out.print("Enter start location: ");
+//             String startLocation = scanner.nextLine();
+//             System.out.print("Enter end location: ");
+//             String endLocation = scanner.nextLine();
+//             System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
+//             Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
+//             System.out.print("Enter available seats: ");
+//             int availableSeats = scanner.nextInt();
+//             System.out.print("Enter luggage space (true or false): ");
+//             boolean luggageSpace = scanner.nextBoolean();
 
-    // book a trip
-    void bookTrip(String username, int numSeats) {
-        // check if the trip has enough available seats for the booking
-        if (this.availableSeats < numSeats) {
-            System.out.println("Not enough available seats.");
-            return;
-        }
+//             Trip newTrip = new Trip(carModel, startLocation, endLocation, startTime, availableSeats, luggageSpace);
+//             newTrip.save(connection);
+//             System.out.println("New trip created with ID: " + newTrip.getTripId());
+//         } catch (SQLException e) {
+//             e.printStackTrace();
+//         }
+//     }
+// }
 
-        // create a new booking object and insert it into the database
-        Booking booking = new Booking(this.tripId, username, numSeats);
-        Database.insertBooking(booking);
-
-        // update the available seats for the trip in the database
-        this.availableSeats -= numSeats;
-        Database.updateTrip(this);
-
-        System.out.println("Booking created successfully.");
-    }
-
-    // cancel a trip
-    void cancelTrip() {
-        // delete the trip from the database
-        Database.deleteTrip(this);
-
-        System.out.println("Trip cancelled successfully.");
-    }
-}
 
