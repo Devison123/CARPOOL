@@ -19,26 +19,22 @@ public class User {
         this.mobileNumber = mobileNumber;
         this.gender = gender;
     }
-    public User(String username, String email, String mobileNumber, String gender) {
-        this.username = username;
-        this.email = email;
-        this.mobileNumber = mobileNumber;
-        this.gender = gender;
-    }
     public String getUsername() {
         return username;
     }
 /////////////////////////////////////////////////////////////////////////////
     public void save(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO Users (username, password, email, mobile_number, gender) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO Users (username,firstname,lastname, password, email, mobile_number, gender) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
         );
         statement.setString(1, this.username);
-        statement.setString(2, this.password);
-        statement.setString(3, this.email);
-        statement.setString(4, this.mobileNumber);
-        statement.setString(5, this.gender);
+        statement.setString(2, this.firstname);
+        statement.setString(3, this.lastname);
+        statement.setString(4, this.password);
+        statement.setString(5, this.email);
+        statement.setString(6, this.mobileNumber);
+        statement.setString(7, this.gender);
         statement.executeUpdate();
         ResultSet resultSet = statement.getGeneratedKeys();
         resultSet.close();
@@ -76,22 +72,27 @@ public class User {
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
             String password = resultSet.getString("password");
+            String firstname = resultSet.getString("firstname");
+            String lastname = resultSet.getString("lastname");
             String email = resultSet.getString("email");
             String mobileNumber = resultSet.getString("mobile_number");
             String gender = resultSet.getString("gender");
-            user = new User(username, password, email, mobileNumber, gender);
+            user = new User(username,firstname,lastname, password, email, mobileNumber, gender);
         }
         resultSet.close();
         statement.close();
+
         return user;
     }
     //////////////////////////////////////////////////////////////////////////////
-    public void editUser(Connection connection, String newUsername, String newPassword, String newEmail, String newMobileNumber, String newGender) throws SQLException {
+    public void editUser(Connection connection,String username,String newfullname,String newlastname, String newPassword, String newEmail, String newMobileNumber, String newGender) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
-                "UPDATE Users SET username = ?, password = ?, email = ?, mobile_number = ?, gender = ? WHERE username = ?"
+                "UPDATE Users SET firstname = ?,lastname=?, password = ?, email = ?, mobile_number = ?, gender = ? WHERE username = ?"
         );
-        statement.setString(1, newUsername);
-        statement.setString(2, newPassword);
+        
+        statement.setString(2, firstname);
+        statement.setString(3, lastname);
+        statement.setString(4, newPassword);
         statement.setString(3, newEmail);
         statement.setString(4, newMobileNumber);
         statement.setString(5, newGender);
