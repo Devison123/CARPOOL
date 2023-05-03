@@ -36,6 +36,10 @@ public class Transactions {
             }
             System.out.println("Username already exists, try again");
         }
+        System.out.print("Enter firstname: ");
+        String firstname = scanner.nextLine();
+        System.out.print("Enter lastname: ");
+        String lastname = scanner.nextLine();
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
         System.out.print("Enter email: ");
@@ -44,7 +48,7 @@ public class Transactions {
         String mobileNumber = scanner.nextLine();
         System.out.print("Enter gender: ");
         String gender = scanner.nextLine();
-        User newUser = new User(username, password, email, mobileNumber, gender);
+        User newUser = new User(username, password,firstname,lastname, email, mobileNumber, gender);
         newUser.save(connection);
         System.out.println("Registered successfully");
     }
@@ -76,6 +80,8 @@ public class Transactions {
         String endLocation = scanner.nextLine();
         System.out.print("Enter the number of seats: ");
         int numSeats = scanner.nextInt();
+        System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
+        Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
         Trip.displayByLocations(connection, startLocation, endLocation, numSeats);
         System.out.print("Enter the trip ID: ");
         int tripId = scanner.nextInt();

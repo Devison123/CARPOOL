@@ -6,9 +6,14 @@ public class User {
     private String email;
     private String mobileNumber;
     private String gender;
+    private String firstname;
+    private String lastname;
 
-    public User(String username, String password, String email, String mobileNumber, String gender) {
+
+    public User(String username, String password,String firstname,String lastname, String email, String mobileNumber, String gender) {
         this.username = username;
+        this.firstname=firstname;
+        this.lastname=lastname;
         this.password = password;
         this.email = email;
         this.mobileNumber = mobileNumber;
