@@ -1,7 +1,6 @@
 import java.sql.*;
 
 public class Trip {
-    private int tripId;
     private String carModel;
     private String username;
     private String startLocation;
@@ -19,6 +18,7 @@ public class Trip {
         this.availableSeats = availableSeats;
         this.luggageSpace = luggageSpace;
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////
     public void save(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO Trips (username, car_model, start_location, end_location, start_time, available_seats, luggage_space) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -32,62 +32,63 @@ public class Trip {
         statement.setBoolean(7, this.luggageSpace);
         statement.executeUpdate();
         ResultSet resultSet = statement.getGeneratedKeys();
-        if (resultSet.next()) {
-            this.tripId = resultSet.getInt(1);
-        }
         resultSet.close();
         statement.close();
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void displayByUsername(Connection connection, String username) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM Trips WHERE username = ?");
+    PreparedStatement statement = connection.prepareStatement(
+        "SELECT * FROM Trips WHERE username = ?");
         statement.setString(1, username);
         ResultSet resultSet = statement.executeQuery();
-        while (resultSet.next()) {
-            int tripId = resultSet.getInt("trip_id");
-            String carModel = resultSet.getString("car_model");
-            String startLocation = resultSet.getString("start_location");
-            String endLocation = resultSet.getString("end_location");
-            Timestamp startTime = resultSet.getTimestamp("start_time");
-            int availableSeats = resultSet.getInt("available_seats");
-            boolean luggageSpace = resultSet.getBoolean("luggage_space");
-            System.out.println("Trip ID: " + tripId);
-            System.out.println("Car Model: " + carModel);
-            System.out.println("Start Location: " + startLocation);
-            System.out.println("End Location: " + endLocation);
-            System.out.println("Start Time: " + startTime);
-            System.out.println("Available Seats: " + availableSeats);
-            System.out.println("Luggage Space: " + luggageSpace);
-            System.out.println();
-        }
-        resultSet.close();
-        statement.close();
+    System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+    System.out.printf("|%-8s|%-14s|%-14s|%-20s|%-20s|%-25s|%-20s|\n", "Trip ID", "Username", "Car Model", "Start Location", "End Location", "Start Time", "Available_seats");
+    System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+
+    while (resultSet.next()) {
+        int tripId = resultSet.getInt("trip_id");
+        String carModel = resultSet.getString("car_model");
+        String startLocation = resultSet.getString("start_location");
+        String endLocation = resultSet.getString("end_location");
+        Timestamp startTime = resultSet.getTimestamp("start_time");
+        int availableSeats = resultSet.getInt("available_seats");
+
+        System.out.printf("|%-8d|%-14s|%-14s|%-20s|%-20s|%-25s|%-20d|\n", tripId, username, carModel, startLocation, endLocation, startTime.toString(), availableSeats);
     }
-    public static void displayByLocations(Connection connection, String startLocation, String endLocation) throws SQLException {
+
+    System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+    resultSet.close();
+    statement.close();
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static void displayByLocations(Connection connection, String startLocation, String endLocation, int num_seats) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM Trips WHERE start_location = ? AND end_location = ?");
+                "SELECT * FROM Trips WHERE start_location = ? AND end_location = ? AND available_seats <= ?");
         statement.setString(1, startLocation);
         statement.setString(2, endLocation);
+        statement.setInt(3, num_seats);
         ResultSet resultSet = statement.executeQuery();
+    
+        System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+        System.out.printf("|%-8s|%-14s|%-14s|%-20s|%-20s|%-25s|%-20s|\n", "Trip ID", "Username", "Car Model", "Start Location", "End Location", "Start Time", "Available_seats");
+        System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+    
         while (resultSet.next()) {
             int tripId = resultSet.getInt("trip_id");
             String username = resultSet.getString("username");
             String carModel = resultSet.getString("car_model");
             Timestamp startTime = resultSet.getTimestamp("start_time");
             int availableSeats = resultSet.getInt("available_seats");
-            boolean luggageSpace = resultSet.getBoolean("luggage_space");
-            System.out.println("Trip ID: " + tripId);
-            System.out.println("Username: " + username);
-            System.out.println("Car Model: " + carModel);
-            System.out.println("Start Location: " + startLocation);
-            System.out.println("End Location: " + endLocation);
-            System.out.println("Start Time: " + startTime);
-            System.out.println("Available Seats: " + availableSeats);
-            System.out.println("Luggage Space: " + luggageSpace);
-            System.out.println();
+    
+            System.out.printf("|%-8d|%-14s|%-14s|%-20s|%-20s|%-25s|%-20d|\n", tripId, username, carModel, startLocation, endLocation, startTime.toString(), availableSeats);
         }
+    
+        System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
         resultSet.close();
         statement.close();
     }
+    
+    
     
 }

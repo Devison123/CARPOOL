@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.util.*;
 public class Booking {
     private int tripId;
     private String username;
@@ -25,4 +24,30 @@ public class Booking {
         resultSet.close();
         statement.close();
     }
+    public static void displayBookingsByUsername(Connection connection, String username) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM Bookings WHERE username = ?"
+        );
+        statement.setString(1, username);
+        ResultSet resultSet = statement.executeQuery();
+    
+        // Print table header
+        System.out.println("+----------+---------+----------+");
+        System.out.println("| Trip ID  | Username | Num Seats |");
+        System.out.println("+----------+---------+----------+");
+    
+        // Print table rows
+        while (resultSet.next()) {
+            int tripId = resultSet.getInt("trip_id");
+            int numSeats = resultSet.getInt("num_seats");
+            System.out.printf("| %-8d | %-7s | %-8d |\n", tripId, username, numSeats);
+        }
+    
+        // Print table footer
+        System.out.println("+----------+---------+----------+");
+    
+        resultSet.close();
+        statement.close();
+    }
+    
 }
