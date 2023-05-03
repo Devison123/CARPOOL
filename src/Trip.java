@@ -35,6 +35,24 @@ public class Trip {
         resultSet.close();
         statement.close();
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    public void updateSeats(Connection connection, int tripId, int numSeats, boolean isAddition) throws SQLException {
+        String operator = isAddition ? "+" : "-";
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE Trips SET available_seats = available_seats " + operator + " ? WHERE trip_id = ?");
+        statement.setInt(1, numSeats);
+        statement.setInt(2, tripId);
+        statement.executeUpdate();
+        statement.close();
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static void delete(Connection connection, int tripId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM Trips WHERE trip_id = ?");
+        statement.setInt(1, tripId);
+        statement.executeUpdate();
+        statement.close();
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void displayByUsername(Connection connection, String username) throws SQLException {
     PreparedStatement statement = connection.prepareStatement(
@@ -87,8 +105,5 @@ public class Trip {
         System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
         resultSet.close();
         statement.close();
-    }
-    
-    
-    
+    }   
 }

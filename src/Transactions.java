@@ -6,7 +6,6 @@ public class Transactions {
     static String username;
 
     static boolean login(Connection connection) throws SQLException {
-        System.out.println("Welcome to carpooling app");
         System.out.println("LOGIN");
         System.out.print("Enter username: ");
         username = scanner.nextLine();

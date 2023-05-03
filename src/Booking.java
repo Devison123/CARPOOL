@@ -24,7 +24,7 @@ public class Booking {
         resultSet.close();
         statement.close();
     }
-    public static void displayBookingsByUsername(Connection connection, String username) throws SQLException {
+    public static void displayByUsername(Connection connection, String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "SELECT * FROM Bookings WHERE username = ?"
         );
@@ -32,22 +32,24 @@ public class Booking {
         ResultSet resultSet = statement.executeQuery();
     
         // Print table header
-        System.out.println("+----------+---------+----------+");
-        System.out.println("| Trip ID  | Username | Num Seats |");
-        System.out.println("+----------+---------+----------+");
+        System.out.println("+----------+----------+-----------+----------------+");
+        System.out.println("| Trip ID  | Username | Num Seats | booking_status |");
+        System.out.println("+----------+----------+-----------+----------------+");
     
         // Print table rows
         while (resultSet.next()) {
             int tripId = resultSet.getInt("trip_id");
             int numSeats = resultSet.getInt("num_seats");
-            System.out.printf("| %-8d | %-7s | %-8d |\n", tripId, username, numSeats);
+            String booking_status = resultSet.getString("booking_status");
+            System.out.printf("| %-8d | %-8s | %-9d | %-14s |\n", tripId, username, numSeats,booking_status);
         }
     
         // Print table footer
-        System.out.println("+----------+---------+----------+");
+        System.out.println("+----------+----------+-----------+----------------+");
     
         resultSet.close();
         statement.close();
     }
+
     
 }
