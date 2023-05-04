@@ -85,13 +85,13 @@ public class User {
         return user;
     }
     //////////////////////////////////////////////////////////////////////////////
-    public void editUser(Connection connection,String username,String newfullname,String newlastname, String newPassword, String newEmail, String newMobileNumber, String newGender) throws SQLException {
+    public void editUser(Connection connection,String username,String newfirstname,String newlastname, String newPassword, String newEmail, String newMobileNumber, String newGender) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "UPDATE Users SET firstname = ?,lastname=?, password = ?, email = ?, mobile_number = ?, gender = ? WHERE username = ?"
         );
         
-        statement.setString(2, firstname);
-        statement.setString(3, lastname);
+        statement.setString(2, newfirstname);
+        statement.setString(3, newlastname);
         statement.setString(4, newPassword);
         statement.setString(3, newEmail);
         statement.setString(4, newMobileNumber);
@@ -100,7 +100,8 @@ public class User {
         statement.executeUpdate();
         statement.close();
         // update the object state with the new details
-        this.username = newUsername;
+        this.firstname=newfirstname;
+        this.lastname=newlastname;
         this.password = newPassword;
         this.email = newEmail;
         this.mobileNumber = newMobileNumber;

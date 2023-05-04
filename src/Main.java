@@ -73,6 +73,8 @@ public class Main {
                     // exit the program
                     System.out.println("You chose option 6: EXIT");
                     break;
+                case 7:
+                
                 default:
                     System.out.println("Invalid choice. Please enter a number between 1 and 6.");
                     break;
