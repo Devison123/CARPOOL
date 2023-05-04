@@ -1,4 +1,7 @@
 import java.sql.*;
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class User {
 
     private String username;
@@ -21,6 +24,24 @@ public class User {
     }
     public String getUsername() {
         return username;
+    }
+    private String getGender() {
+        return gender;
+    }
+    private String getEmail() {
+        return email;
+    }
+    private String getMobileNumber() {
+        return mobileNumber;
+    }
+    private String getLastName() {
+        return lastname;
+    }
+    private String getFirstname() {
+        return firstname;
+    }
+    private String getPassword() {
+        return "******";
     }
 /////////////////////////////////////////////////////////////////////////////
     public void save(Connection connection) throws SQLException {
@@ -65,7 +86,7 @@ public class User {
         return count > 0;
     }
     ////////////////////////////////////////////////////////////////////////////////
-    public static User profile(Connection connection, String username) throws SQLException {
+    public static void profile(Connection connection, String username) throws SQLException {
         User user = null;
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM Users WHERE username = ?");
         statement.setString(1, username);
@@ -77,13 +98,57 @@ public class User {
             String email = resultSet.getString("email");
             String mobileNumber = resultSet.getString("mobile_number");
             String gender = resultSet.getString("gender");
-            user = new User(username,firstname,lastname, password, email, mobileNumber, gender);
+            user = new User(username, firstname, lastname, password, email, mobileNumber, gender);
         }
         resultSet.close();
         statement.close();
-
-        return user;
+    
+        if (user != null) {
+            String[][] table = {
+                {" "," "},
+                {"Username", user.getUsername()},
+                {"Password", user.getPassword()},
+                {"First Name", user.getFirstname()},
+                {"Last Name", user.getLastName()},
+                {"Email", user.getEmail()},
+                {"Mobile Number", user.getMobileNumber()},
+                {"Gender", user.getGender()}
+            };
+    
+            int[] columnWidths = new int[table[0].length];
+            for (int i = 0; i < columnWidths.length; i++) {
+                int maxWidth = 0;
+                for (int j = 0; j < table.length; j++) {
+                    String value = table[j][i];
+                    if (value != null && value.length() > maxWidth) {
+                        maxWidth = value.length();
+                    }
+                }
+                columnWidths[i] = maxWidth;
+            }
+    
+            String border = "+" + Arrays.stream(columnWidths).mapToObj(width -> "-".repeat(width + 2)).collect(Collectors.joining("+", "+", "+")) + "%n";
+            String format = "|" + Arrays.stream(columnWidths).mapToObj(width -> " %-" + width + "s |").collect(Collectors.joining()) + "%n";
+    
+            System.out.format(border);
+            System.out.format(format, (Object[]) table[0]);
+            System.out.format(border);
+    
+            for (int i = 1; i < table.length; i++) {
+                String[] row = table[i];
+                Object[] formattedRow = new Object[row.length];
+                for (int j = 0; j < row.length; j++) {
+                    String value = row[j];
+                    formattedRow[j] = (value != null) ? value : "";
+                }
+                System.out.format(format, formattedRow);
+            }
+    
+            System.out.format(border);
+        }
     }
+    
+
     //////////////////////////////////////////////////////////////////////////////
     public void editUser(Connection connection,String username,String newfirstname,String newlastname, String newPassword, String newEmail, String newMobileNumber, String newGender) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -110,6 +175,8 @@ public class User {
     ////////////////////////////////////////////////////////////////////////////////
     public void display() {
         System.out.println("Username: " + this.username);
+        System.out.println("Username: " + this.firstname);
+        System.out.println("Username: " + this.lastname);
         System.out.println("Email: " + this.email);
         System.out.println("Mobile Number: " + this.mobileNumber);
         System.out.println("Gender: " + this.gender);

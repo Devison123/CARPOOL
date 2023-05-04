@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class Trip {
     private String carModel;
@@ -80,30 +82,42 @@ public class Trip {
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void displayByLocations(Connection connection, String startLocation, String endLocation, int num_seats) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM Trips WHERE start_location = ? AND end_location = ? AND available_seats <= ?");
-        statement.setString(1, startLocation);
-        statement.setString(2, endLocation);
-        statement.setInt(3, num_seats);
-        ResultSet resultSet = statement.executeQuery();
+    public static void displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateString) throws SQLException {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+            Date parsedDate = dateFormat.parse(dateString);
+            Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
     
-        System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
-        System.out.printf("|%-8s|%-14s|%-14s|%-20s|%-20s|%-25s|%-20s|\n", "Trip ID", "Username", "Car Model", "Start Location", "End Location", "Start Time", "Available_seats");
-        System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM Trips WHERE start_location = ? AND end_location = ? AND available_seats <= ? AND start_time >= ?");
+            statement.setString(1, startLocation);
+            statement.setString(2, endLocation);
+            statement.setInt(3, numSeats);
+            statement.setTimestamp(4, timestamp);
+            ResultSet resultSet = statement.executeQuery();
     
-        while (resultSet.next()) {
-            int tripId = resultSet.getInt("trip_id");
-            String username = resultSet.getString("username");
-            String carModel = resultSet.getString("car_model");
-            Timestamp startTime = resultSet.getTimestamp("start_time");
-            int availableSeats = resultSet.getInt("available_seats");
+            System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+            System.out.printf("|%-8s|%-14s|%-14s|%-20s|%-20s|%-25s|%-20s|\n", "Trip ID", "Username", "Car Model", "Start Location", "End Location", "Start Time", "Available Seats");
+            System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
     
-            System.out.printf("|%-8d|%-14s|%-14s|%-20s|%-20s|%-25s|%-20d|\n", tripId, username, carModel, startLocation, endLocation, startTime.toString(), availableSeats);
+            while (resultSet.next()) {
+                int tripId = resultSet.getInt("trip_id");
+                String username = resultSet.getString("username");
+                String carModel = resultSet.getString("car_model");
+                Timestamp startTime = resultSet.getTimestamp("start_time");
+                int availableSeats = resultSet.getInt("available_seats");
+    
+                System.out.printf("|%-8d|%-14s|%-14s|%-20s|%-20s|%-25s|%-20d|\n", tripId, username, carModel, startLocation, endLocation, startTime.toString(), availableSeats);
+            }
+    
+            System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+            resultSet.close();
+            statement.close();
+    
+        } catch (ParseException e) {
+            System.err.println("Invalid date format. Please use yy-MM-dd HH:mm:ss format.");
         }
+    }
     
-        System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
-        resultSet.close();
-        statement.close();
-    }   
+     
 }

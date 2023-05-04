@@ -4,9 +4,10 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         Connection connection = Database.connect();
         Scanner scan = new Scanner(System.in); 
-        String username;
+        String username = Transactions.username ;
         boolean loggedin = false;
         int choice=0;
+        User.profile(connection, "arjun");
         do{
             System.out.println("**** WELCOME TO CARPOOL ****");
             System.out.println("+--------------------+");
@@ -27,7 +28,7 @@ public class Main {
                     }
                   
         int option;
-
+        
         do {
             System.out.println("\u001B[36m" + "+-------------------------------+" + "\u001B[0m");
             System.out.println("\u001B[36m" + "|           MAIN MENU           |" + "\u001B[0m");

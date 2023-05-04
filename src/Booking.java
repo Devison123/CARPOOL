@@ -8,8 +8,6 @@ public class Booking {
         this.numSeats = numSeats;
         this.username = username;
     }
-
-
     public void save(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO Bookings (trip_id, username, num_seats) VALUES (?, ?, ?)",
