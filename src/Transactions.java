@@ -85,6 +85,7 @@ public class Transactions {
         String endLocation = scanner.nextLine();
         System.out.print("Enter the number of seats: ");
         int numSeats = scanner.nextInt();
+        scanner.nextLine();
         System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS, e.g. 2023-05-05 10:00:00): ");
         try {
             Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
@@ -94,6 +95,7 @@ public class Transactions {
         } catch (IllegalArgumentException e) {
             System.out.println(
                     "Invalid date/time format. Please enter a date/time in the format YYYY-MM-DD HH:MM:SS, e.g. 2023-05-05 10:00:00.");
+                    return;
         }
 
         // System.out.print("Enter  date (YYYY-MM-DD): ");

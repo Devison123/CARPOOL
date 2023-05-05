@@ -8,8 +8,8 @@ public class Main {
         String username = Transactions.username;
         boolean loggedin = false;
         int choice = 0;
-        Trip.displayByLocations(connection, username, username, choice, null);
-        User.profile(connection, "arjun");
+        // Trip.displayByLocations(connection, username, username, choice, null);
+        // User.profile(connection, "arjun");
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
             System.out.println("+--------------------+");
@@ -60,7 +60,7 @@ public class Main {
                             case 1:
                                 // code for booking a trip
                                 System.out.println("You chose option 1: BOOK A TRIP");
-
+                                Transactions.createBooking(connection);;
                                 break;
                             case 2:
                                 // code for adding a trip
@@ -120,7 +120,7 @@ public class Main {
                         }
 
                         System.out.println(); // add a blank line for readability
-                    } while (choice != 8);//
+                    } while (option != 8);//
 
                     break;
 
