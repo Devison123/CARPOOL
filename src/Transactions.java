@@ -138,6 +138,15 @@ public class Transactions {
     //     }
     //     return isEmpty;
     //}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+static void cancelTrip(Connection connection)throws SQLException{
+    System.out.print("Enter the trip id you want to cancel");
+    int tripId = Integer.parseInt(scanner.nextLine());
+    Trip.cancelTrip(connection,tripId);
+    if(Booking.doesBookingExist(connection, tripId)){
+        Booking.cancelBooking(connection, tripId);
+    }
     
+}     
     
 }

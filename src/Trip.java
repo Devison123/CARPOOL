@@ -120,13 +120,14 @@ public class Trip {
             return false;
         }
     }
-    
-    
-    
-    
-
-
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static void cancelTrip(Connection connection, int tripId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE Trips SET trip_status = 'TRIP CANCELLED' WHERE trip_id = ?");
+        statement.setInt(1, tripId);
+        statement.executeUpdate();
+        statement.close();
+    }
 
 }
 

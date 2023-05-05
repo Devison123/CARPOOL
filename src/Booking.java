@@ -8,6 +8,9 @@ public class Booking {
         this.numSeats = numSeats;
         this.username = username;
     }
+    public Booking(){
+
+    };
     public void save(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO Bookings (trip_id, username, num_seats) VALUES (?, ?, ?)",
@@ -48,6 +51,36 @@ public class Booking {
         resultSet.close();
         statement.close();
     }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static void cancelBooking(Connection connection, int trip_id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE Bookings SET booking_status = 'CANCELLED' WHERE trip_id = ?"
+        );
+        statement.setInt(1, trip_id);
+        int rowsUpdated = statement.executeUpdate();
+    
+        if (rowsUpdated == 0) {
+            System.out.printf("No booking found with ID %d\n", trip_id);
+        } else {
+            System.out.printf("Booking with ID %d has been cancelled\n", trip_id);
+        }
+    
+        statement.close();
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    public static boolean doesBookingExist(Connection connection, int tripId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT COUNT(*) as count FROM Bookings WHERE trip_id = ?"
+        );
+        statement.setInt(1, tripId);
+        ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        int count = resultSet.getInt("count");
+        resultSet.close();
+        statement.close();
+        return count > 0;
+    }
+    
+    
     
 }

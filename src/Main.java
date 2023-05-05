@@ -10,6 +10,8 @@ public class Main {
         int choice = 0;
         // Trip.displayByLocations(connection, username, username, choice, null);
         // User.profile(connection, "arjun");
+        loggedin = Transactions.login(connection);
+        Transactions.cancelTrip(connection);
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
             System.out.println("+--------------------+");
@@ -99,7 +101,6 @@ public class Main {
                                 User user=new User(username);
                                 user.editUser(connection, username, newfirstname, newlastname, newPassword, newEmail,
                                         newMobileNumber, newGender);
-
                                 break;
                             case 6:
                                 // view trip
