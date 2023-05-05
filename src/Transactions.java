@@ -137,8 +137,16 @@ public class Transactions {
     }
 
 
- public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateTimeStr) throws SQLException {
-        try {
+ /**
+ * @param connection
+ * @param startLocation
+ * @param endLocation
+ * @param numSeats
+ * @param dateTimeStr
+ * @return
+ * @throws SQLException
+ */
+public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateTimeStr) throws SQLException {
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     
             PreparedStatement statement = connection.prepareStatement(
@@ -159,8 +167,10 @@ public class Transactions {
             if (!resultSet.next()) {
                 System.out.println("\u001B[31mNo cabs are available for this route on this date and time.\u001B[0m");
                 return false;
+            }else{
+                return true;
             }
-
+        }
     ////////////////////////////////////////////////////////////////////////
     static boolean isTripListEmpty(Connection connection) throws SQLException {
         boolean isEmpty = true;
@@ -189,30 +199,40 @@ public class Transactions {
     //}
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 static void cancelTrip(Connection connection)throws SQLException{
+    Trip.displayByUsername(connection, username);
     System.out.print("Enter the trip id you want to cancel");
     int tripId = Integer.parseInt(scanner.nextLine());
     Trip.cancelTrip(connection,tripId);
     if(Booking.doesBookingExist(connection, tripId)){
         Booking.cancelBooking(connection, tripId);
-    }
-    
+    }   
+}
+static void cancelBooking(Connection connection)throws SQLException{
+    Booking.displayByUsername(connection, username);
+    System.out.print("Enter the booking id you want to cancel");
+    int tripId = Integer.parseInt(scanner.nextLine());
+    Booking.cancelBooking(connection,tripId);
+    if(Booking.doesBookingExist(connection, tripId)){
+        Booking.cancelBooking(connection, tripId);
+    }   
 }
 
-public static Scanner getScanner() {
-    return scanner;
-}
+// public static Scanner getScanner() {
+//     return scanner;
+// }
 
-public static void setScanner(Scanner scanner) {
-    Transactions.scanner = scanner;
-}
+// public static void setScanner(Scanner scanner) {
+//     Transactions.scanner = scanner;
+// }
 
-public static String getUsername() {
-    return username;
-}
+// public static String getUsername() {
+//     return username;
+// }
 
-public static void setUsername(String username) {
-    Transactions.username = username;
+// public static void setUsername(String username) {
+//     Transactions.username = username;
+// }
 }     
     
-}
+
  

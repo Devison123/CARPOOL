@@ -61,7 +61,7 @@ public class Main {
                             case 1:
                                 // code for booking a trip
                                 System.out.println("You chose option 1: BOOK A TRIP");
-                                Transactions.createBooking(connection);;
+                                Transactions.createBooking(connection);
                                 break;
                             case 2:
                                 // code for adding a trip
@@ -71,10 +71,12 @@ public class Main {
                             case 3:
                                 // code for cancelling a booking
                                 System.out.println("You chose option 3: CANCEL BOOKING");
+                                Transactions.cancelBooking(connection);
                                 break;
                             case 4:
                                 // code for cancelling a trip
                                 System.out.println("You chose option 4: CANCEL TRIP");
+                                Transactions.cancelTrip(connection);
                                 break;
                             case 5:
                                 // code for editing account details
@@ -103,10 +105,11 @@ public class Main {
                                 break;
                             case 6:
                                 // view trip
-
+                                Trip.displayByUsername(connection, username);
                                 break;
                             case 7:
                                 // view booking
+                                Booking.displayByUsername(connection, username);
                                 break;
 
                             case 8:
@@ -118,7 +121,6 @@ public class Main {
                                 System.out.println("Invalid choice. Please enter a number between 1 and 8.");
                                 break;
                         }
-
                         System.out.println(); // add a blank line for readability
                     } while (option != 8);//
 
@@ -129,14 +131,6 @@ public class Main {
                     break;
             }
         } while (choice != 3);
-        // if(Transactions.login(connection)){
-        // username = Transactions.username;
-        // Transactions.createBooking(connection);
-        // // addtrip(connection);
-        // // Trip.displayByUsername(connection,"daniel");
-        // Booking.displayByUsername(connection, username );
-        // }
-        // Trip.displayByUsername(connection,"daniel");
 
     }
 }
