@@ -196,6 +196,23 @@ static void cancelTrip(Connection connection)throws SQLException{
         Booking.cancelBooking(connection, tripId);
     }
     
+}
+
+public static Scanner getScanner() {
+    return scanner;
+}
+
+public static void setScanner(Scanner scanner) {
+    Transactions.scanner = scanner;
+}
+
+public static String getUsername() {
+    return username;
+}
+
+public static void setUsername(String username) {
+    Transactions.username = username;
 }     
     
 }
+ 

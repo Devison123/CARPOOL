@@ -178,7 +178,39 @@ public class Trip {
             return false;
         }
     }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    public static void displayByUsername(Connection connection, String username) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM Trips WHERE username = ?");
+        statement.setString(1, username);
+        ResultSet resultSet = statement.executeQuery();
+    
+        if (!resultSet.next()) {
+            System.out.println("\u001B[31mNo trips found for this username.\u001B[0m");
+            return;
+        }
+    
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+\u001B[0m");
+        System.out.printf("\u001B[32m|%-8s|%-17s|%-17s|%-17s|%-21s|%-20s|%-14s|\u001B[0m\n", "Trip ID", "Car Model", "Start Location", "End Location", "Start Time", "Available Seats", "Luggage Space");
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+\u001B[0m");
+    
+        do {
+            int tripId = resultSet.getInt("trip_id");
+            String carModel = resultSet.getString("car_model");
+            String startLocation = resultSet.getString("start_location");
+            String endLocation = resultSet.getString("end_location");
+            Timestamp startTime = resultSet.getTimestamp("start_time");
+            int availableSeats = resultSet.getInt("available_seats");
+            boolean luggageSpace = resultSet.getBoolean("luggage_space");
+    
+            System.out.printf("\u001B[36m|%-8d|%-17s|%-17s|%-17s|%-21s|%-20d|%-14s|\u001B[0m\n", tripId, carModel, startLocation, endLocation, startTime.toString(), availableSeats, luggageSpace);
+        } while (resultSet.next());
+    
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+\u001B[0m");
+        resultSet.close();
+        statement.close();
+    }
+    
 
 
 }
