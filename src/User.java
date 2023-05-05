@@ -12,6 +12,10 @@ public class User {
     private String firstname;
     private String lastname;
 
+    public User( String username){
+        this.username=username;
+    }
+
 
     public User(String username, String password,String firstname,String lastname, String email, String mobileNumber, String gender) {
         this.username = username;
@@ -155,13 +159,13 @@ public class User {
                 "UPDATE Users SET firstname = ?,lastname=?, password = ?, email = ?, mobile_number = ?, gender = ? WHERE username = ?"
         );
         
-        statement.setString(2, newfirstname);
-        statement.setString(3, newlastname);
-        statement.setString(4, newPassword);
-        statement.setString(3, newEmail);
-        statement.setString(4, newMobileNumber);
-        statement.setString(5, newGender);
-        statement.setString(6, this.username);
+        statement.setString(1, newfirstname);
+        statement.setString(2, newlastname);
+        statement.setString(3, newPassword);
+        statement.setString(4, newEmail);
+        statement.setString(5, newMobileNumber);
+        statement.setString(6, newGender);
+        statement.setString(7, this.username);
         statement.executeUpdate();
         statement.close();
         // update the object state with the new details

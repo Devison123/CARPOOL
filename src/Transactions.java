@@ -74,15 +74,31 @@ public class Transactions {
 
     static void createBooking(Connection connection) throws SQLException {
         // Take input from the user for tripId, riderId, and numSeats
+        boolean trip=isTripListEmpty(connection);
+        if(trip){
+            System.out.println("No trip is Registered.try agian later");
+            return ;
+        }
         System.out.print("Enter start location: ");
         String startLocation = scanner.nextLine();
         System.out.print("Enter end location: ");
         String endLocation = scanner.nextLine();
         System.out.print("Enter the number of seats: ");
         int numSeats = scanner.nextInt();
-        System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
-        Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
-        Trip.displayByLocations(connection, startLocation, endLocation, numSeats);
+        System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS, e.g. 2023-05-05 10:00:00): ");
+        try {
+            Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
+            Trip booktrip=new Trip();
+            booktrip.displayByLocations(connection, startLocation, endLocation, numSeats,startTime);
+            // use startTime variable as needed
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                    "Invalid date/time format. Please enter a date/time in the format YYYY-MM-DD HH:MM:SS, e.g. 2023-05-05 10:00:00.");
+        }
+
+        // System.out.print("Enter  date (YYYY-MM-DD): ");
+        // Date startDate = Date.valueOf(scanner.nextLine());
+
         System.out.print("Enter the trip ID: ");
         int tripId = scanner.nextInt();
         scanner.close();
@@ -93,4 +109,33 @@ public class Transactions {
         // Save the booking to the database and set the bookingId field
         booking.save(connection);
     }
+
+    ////////////////////////////////////////////////////////////////////////
+    static boolean isTripListEmpty(Connection connection) throws SQLException {
+        boolean isEmpty = true;
+        String sql = "SELECT * FROM Trips";
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                isEmpty = false;
+            }
+        }
+        return isEmpty;
+    }
+
+    // static boolean isTripListEmptyForDate(Connection conn, Date date) throws SQLException {
+    //     boolean isEmpty = true;
+    //     String sql = "SELECT * FROM Trips WHERE start_time >= ?";
+    //     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+    //         stmt.setDate(1, date);
+    //         try (ResultSet rs = stmt.executeQuery()) {
+    //             if (rs.next()) {
+    //                 isEmpty = false;
+    //             }
+    //         }
+    //     }
+    //     return isEmpty;
+    //}
+    
+    
 }

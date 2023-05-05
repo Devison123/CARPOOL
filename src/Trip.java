@@ -20,6 +20,10 @@ public class Trip {
         this.availableSeats = availableSeats;
         this.luggageSpace = luggageSpace;
     }
+
+    public Trip(){
+
+    };
     ///////////////////////////////////////////////////////////////////////////////////////////
     public void save(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -56,68 +60,51 @@ public class Trip {
         statement.close();
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void displayByUsername(Connection connection, String username) throws SQLException {
-    PreparedStatement statement = connection.prepareStatement(
-        "SELECT * FROM Trips WHERE username = ?");
-        statement.setString(1, username);
-        ResultSet resultSet = statement.executeQuery();
-    System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
-    System.out.printf("|%-8s|%-14s|%-14s|%-20s|%-20s|%-25s|%-20s|\n", "Trip ID", "Username", "Car Model", "Start Location", "End Location", "Start Time", "Available_seats");
-    System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
-
-    while (resultSet.next()) {
-        int tripId = resultSet.getInt("trip_id");
-        String carModel = resultSet.getString("car_model");
-        String startLocation = resultSet.getString("start_location");
-        String endLocation = resultSet.getString("end_location");
-        Timestamp startTime = resultSet.getTimestamp("start_time");
-        int availableSeats = resultSet.getInt("available_seats");
-
-        System.out.printf("|%-8d|%-14s|%-14s|%-20s|%-20s|%-25s|%-20d|\n", tripId, username, carModel, startLocation, endLocation, startTime.toString(), availableSeats);
-    }
-
-    System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
-    resultSet.close();
-    statement.close();
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateString) throws SQLException {
+    public static void displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, Timestamp date) throws SQLException {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-            Date parsedDate = dateFormat.parse(dateString);
-            Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-    
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM Trips WHERE start_location = ? AND end_location = ? AND available_seats <= ? AND start_time >= ?");
+                    "SELECT t.start_time, t.available_seats, t.trip_id, t.username, CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.contact_no, u.gender, t.car_model, t.start_location, t.end_location FROM Trips t JOIN Users u ON t.username = u.username WHERE t.start_location = ? AND t.end_location = ? AND t.available_seats >= ? AND t.start_time >= ?");
             statement.setString(1, startLocation);
             statement.setString(2, endLocation);
             statement.setInt(3, numSeats);
-            statement.setTimestamp(4, timestamp);
+            statement.setTimestamp(4, date);
             ResultSet resultSet = statement.executeQuery();
     
-            System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
-            System.out.printf("|%-8s|%-14s|%-14s|%-20s|%-20s|%-25s|%-20s|\n", "Trip ID", "Username", "Car Model", "Start Location", "End Location", "Start Time", "Available Seats");
-            System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
-    
-            while (resultSet.next()) {
-                int tripId = resultSet.getInt("trip_id");
-                String username = resultSet.getString("username");
-                String carModel = resultSet.getString("car_model");
-                Timestamp startTime = resultSet.getTimestamp("start_time");
-                int availableSeats = resultSet.getInt("available_seats");
-    
-                System.out.printf("|%-8d|%-14s|%-14s|%-20s|%-20s|%-25s|%-20d|\n", tripId, username, carModel, startLocation, endLocation, startTime.toString(), availableSeats);
+            if (!resultSet.next()) {
+                System.out.println("\u001B[31mNo cabs are available for this route on this date and time.\u001B[0m");
+                return;
             }
     
-            System.out.println("+--------+--------------+--------------+--------------------+--------------------+-------------------------+--------------------+");
+            System.out.println("\u001B[32m+---------------------+--------------------+--------+-----------------------+----------------+--------+--------------+--------------------+--------------------+-----------------+\u001B[0m");
+            System.out.printf("\u001B[32m|%-21s|%-20s|%-8s|%-23s|%-16s|%-8s|%-14s|%-20s|%-20s|%-17s|\u001B[0m\n", "Start Time", "Available Seats", "Trip ID", "Driver Name", "Contact No", "Gender", "Car Model", "Start Location", "End Location", "Username");
+            System.out.println("\u001B[32m+---------------------+--------------------+--------+-----------------------+----------------+--------+--------------+--------------------+--------------------+-----------------+\u001B[0m");
+    
+            do {
+                Timestamp startTime = resultSet.getTimestamp("start_time");
+                int availableSeats = resultSet.getInt("available_seats");
+                int tripId = resultSet.getInt("trip_id");
+                String fullName = resultSet.getString("full_name");
+                String contactNo = resultSet.getString("contact_no");
+                String gender = resultSet.getString("gender");
+                String carModel = resultSet.getString("car_model");
+                String startLoc = resultSet.getString("start_location");
+                String endLoc = resultSet.getString("end_location");
+                String username = resultSet.getString("username");
+    
+                System.out.printf("\u001B[36m|%-21s|%-20d|%-8d|%-23s|%-16s|%-8s|%-14s|%-20s|%-20s|%-17s|\u001B[0m\n", startTime.toString(), availableSeats, tripId, fullName, contactNo, gender, carModel, startLoc, endLoc, username);
+            } while (resultSet.next());
+    
+            System.out.println("\u001B[32m+---------------------+--------------------+--------+-----------------------+----------------+--------+--------------+--------------------+--------------------+-----------------+\u001B[0m");
             resultSet.close();
             statement.close();
     
-        } catch (ParseException e) {
-            System.err.println("Invalid date format. Please use yy-MM-dd HH:mm:ss format.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+    
+    
+    
     
      
 }
