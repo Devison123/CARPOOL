@@ -8,6 +8,7 @@ public class Main {
         String username = Transactions.username;
         boolean loggedin = false;
         int choice = 0;
+        Trip.displayByLocations(connection, username, username, choice, null);
         User.profile(connection, "arjun");
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
