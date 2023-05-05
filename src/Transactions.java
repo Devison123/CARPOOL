@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Transactions {
@@ -88,9 +90,31 @@ public class Transactions {
         scanner.nextLine();
         System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS, e.g. 2023-05-05 10:00:00): ");
         try {
-            Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
+            System.out.print("Enter a date/time (yyyy-MM-dd HH:mm:ss): ");
+            String input = scanner.nextLine();
+    
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(input, formatter);
+            String dateTimeString = dateTime.toString();
+    
+            System.out.println("Input date/time: " + dateTimeString);
             Trip booktrip=new Trip();
-            booktrip.displayByLocations(connection, startLocation, endLocation, numSeats,startTime);
+            boolean display=Trip.displayByLocations(connection, startLocation, endLocation, numSeats,dateTimeString);
+            
+            if(display){
+                return;
+
+            };
+
+        System.out.print("Enter the trip ID: ");
+        int tripId = scanner.nextInt();
+        scanner.close();
+
+        // Create a new Booking object with the input values
+        Booking booking = new Booking(tripId, username, numSeats);
+
+        // Save the booking to the database and set the bookingId field
+        booking.save(connection);
             // use startTime variable as needed
         } catch (IllegalArgumentException e) {
             System.out.println(
@@ -111,6 +135,31 @@ public class Transactions {
         // Save the booking to the database and set the bookingId field
         booking.save(connection);
     }
+
+
+ public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateTimeStr) throws SQLException {
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    
+            PreparedStatement statement = connection.prepareStatement(
+                "SELECT t.start_time, t.available_seats, t.trip_id, t.username, u.mobile_number, u.gender, t.car_model " +
+                "FROM Trips t " +
+                "JOIN Users u ON t.username = u.username " +
+                "WHERE t.start_location = ? " +
+                "AND t.end_location = ? " +
+                "AND t.available_seats >= ? " +
+                "AND t.start_time >= ?"
+            );
+            statement.setString(1, startLocation);
+            statement.setString(2, endLocation);
+            statement.setInt(3, numSeats);
+            statement.setTimestamp(4, Timestamp.valueOf(dateTime));
+    
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                System.out.println("\u001B[31mNo cabs are available for this route on this date and time.\u001B[0m");
+                return false;
+            }
 
     ////////////////////////////////////////////////////////////////////////
     static boolean isTripListEmpty(Connection connection) throws SQLException {

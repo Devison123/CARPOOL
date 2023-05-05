@@ -10,8 +10,7 @@ public class Main {
         int choice = 0;
         // Trip.displayByLocations(connection, username, username, choice, null);
         // User.profile(connection, "arjun");
-        loggedin = Transactions.login(connection);
-        Transactions.cancelTrip(connection);
+    
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
             System.out.println("+--------------------+");
