@@ -11,6 +11,7 @@ public class Booking {
     public Booking(){
 
     };
+    ///////////////////////////////////////////////////////////////////////////
     public void save(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "INSERT INTO Bookings (trip_id, username, num_seats) VALUES (?, ?, ?)",
@@ -24,9 +25,8 @@ public class Booking {
 
         resultSet.close();
         statement.close();
-        Trip trip=new Trip();
-        trip.updateSeats(connection, tripId, numSeats, false);
     }
+    ////////////////////////////////////////////////////////////////////////////
     public static void displayByUsername(Connection connection, String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
                 "SELECT * FROM Bookings WHERE username = ?"
@@ -81,9 +81,24 @@ public class Booking {
         resultSet.close();
         statement.close();
         return count > 0;
+    }  
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    public static int getNumSeatsByTripId(Connection connection, int tripId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT num_seats FROM Bookings WHERE trip_id = ?"
+        );
+        statement.setInt(1, tripId);
+        ResultSet resultSet = statement.executeQuery();
+        
+        int numSeats = 0;
+        if (resultSet.next()) {
+            numSeats = resultSet.getInt("num_seats");
+        }
+        
+        resultSet.close();
+        statement.close();
+        
+        return numSeats;
     }
-    
-    
-    
     
 }

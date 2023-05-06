@@ -44,7 +44,7 @@ public class Trip {
         statement.close();
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    public void updateSeats(Connection connection, int tripId, int numSeats, boolean isAddition) throws SQLException {
+    public static void updateSeats(Connection connection, int tripId, int numSeats, boolean isAddition) throws SQLException {
         String operator = isAddition ? "+" : "-";
         PreparedStatement statement = connection.prepareStatement(
                 "UPDATE Trips SET available_seats = available_seats " + operator + " ? WHERE trip_id = ?");
@@ -52,6 +52,7 @@ public class Trip {
         statement.setInt(2, tripId);
         statement.executeUpdate();
         statement.close();
+        
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void delete(Connection connection, int tripId) throws SQLException {

@@ -5,12 +5,9 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         Connection connection = Database.connect();
         Scanner scan = new Scanner(System.in);
-        String username = Transactions.username;
+        String username;
         boolean loggedin = false;
         int choice = 0;
-        // Trip.displayByLocations(connection, username, username, choice, null);
-        // User.profile(connection, "arjun");
-    
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
             System.out.println("+--------------------+");
@@ -25,6 +22,7 @@ public class Main {
             switch (choice) {
                 case 1:
                     loggedin = Transactions.login(connection);
+                    username = Transactions.username;
                     if (!loggedin) {
                         System.out.println("/nTry again / Try registering");
                         break;
@@ -105,6 +103,7 @@ public class Main {
                                 break;
                             case 6:
                                 // view trip
+                                System.out.println(username);
                                 Trip.displayByUsername(connection, username);
                                 break;
                             case 7:
@@ -131,7 +130,7 @@ public class Main {
                     break;
                 
                 case 3:
-                System.out.println("Existing..");
+                System.out.println("Exiting.....");
             }
         } while (choice != 3);
 

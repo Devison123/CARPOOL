@@ -109,8 +109,7 @@ static void createBooking(Connection connection) throws SQLException {
         int tripId = scanner.nextInt();
         Booking book=new Booking(tripId,username,numSeats);
         book.save(connection);
-        
-
+        Trip.updateSeats(connection, tripId, numSeats, false);
     } catch (DateTimeParseException e) {
         System.out.println("Invalid date format. Please enter a valid date in YYYY-MM-DD format.");
         return;
@@ -196,24 +195,11 @@ static void cancelBooking(Connection connection)throws SQLException{
     Booking.cancelBooking(connection,tripId);
     if(Booking.doesBookingExist(connection, tripId)){
         Booking.cancelBooking(connection, tripId);
+        int numseat = Booking.getNumSeatsByTripId(connection, tripId);
+        Trip.updateSeats(connection,tripId,numseat,true);
     }   
 }
 
-// public static Scanner getScanner() {
-//     return scanner;
-// }
-
-// public static void setScanner(Scanner scanner) {
-//     Transactions.scanner = scanner;
-// }
-
-// public static String getUsername() {
-//     return username;
-// }
-
-// public static void setUsername(String username) {
-//     Transactions.username = username;
-// }
 }     
     
 

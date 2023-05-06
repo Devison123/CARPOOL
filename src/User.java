@@ -177,6 +177,14 @@ public class User {
         this.gender = newGender;
     }
     ////////////////////////////////////////////////////////////////////////////////
+    public static void delete(Connection connection, String username) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "DELETE FROM Users WHERE username = ?");
+        statement.setString(1, username);
+        statement.executeUpdate();
+        statement.close();
+    }
+    ///////////////////////////////////////////////////////////////////////////////
     public void display() {
         System.out.println("Username: " + this.username);
         System.out.println("Username: " + this.firstname);
