@@ -1,6 +1,8 @@
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Transactions {
@@ -74,67 +76,47 @@ public class Transactions {
         System.out.println("New trip created");
     }
 
-    static void createBooking(Connection connection) throws SQLException {
-        // Take input from the user for tripId, riderId, and numSeats
-        boolean trip=isTripListEmpty(connection);
-        if(trip){
-            System.out.println("No trip is Registered.try agian later");
-            return ;
-        }
-        System.out.print("Enter start location: ");
-        String startLocation = scanner.nextLine();
-        System.out.print("Enter end location: ");
-        String endLocation = scanner.nextLine();
-        System.out.print("Enter the number of seats: ");
-        int numSeats = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS, e.g. 2023-05-05 10:00:00): ");
-        try {
-            System.out.print("Enter a date/time (yyyy-MM-dd HH:mm:ss): ");
-            String input = scanner.nextLine();
-    
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime dateTime = LocalDateTime.parse(input, formatter);
-            String dateTimeString = dateTime.toString();
-    
-            System.out.println("Input date/time: " + dateTimeString);
-            Trip booktrip=new Trip();
-            boolean display=Trip.displayByLocations(connection, startLocation, endLocation, numSeats,dateTimeString);
-            
-            if(display){
-                return;
-
-            };
-
-        System.out.print("Enter the trip ID: ");
-        int tripId = scanner.nextInt();
-        scanner.close();
-
-        // Create a new Booking object with the input values
-        Booking booking = new Booking(tripId, username, numSeats);
-
-        // Save the booking to the database and set the bookingId field
-        booking.save(connection);
-            // use startTime variable as needed
-        } catch (IllegalArgumentException e) {
-            System.out.println(
-                    "Invalid date/time format. Please enter a date/time in the format YYYY-MM-DD HH:MM:SS, e.g. 2023-05-05 10:00:00.");
-                    return;
-        }
-
-        // System.out.print("Enter  date (YYYY-MM-DD): ");
-        // Date startDate = Date.valueOf(scanner.nextLine());
-
-        System.out.print("Enter the trip ID: ");
-        int tripId = scanner.nextInt();
-        scanner.close();
-
-        // Create a new Booking object with the input values
-        Booking booking = new Booking(tripId, username, numSeats);
-
-        // Save the booking to the database and set the bookingId field
-        booking.save(connection);
+////////////////////////////////////////////////////
+static void createBooking(Connection connection) throws SQLException {
+    // Take input from the user for tripId, riderId, and numSeats
+    boolean trip = isTripListEmpty(connection);
+    if (trip) {
+        System.out.println("No trip is Registered. Try again later");
+        return;
     }
+    System.out.print("Enter start location: ");
+    String startLocation = scanner.nextLine();
+    System.out.print("Enter end location: ");
+    String endLocation = scanner.nextLine();
+    System.out.print("Enter the number of seats: ");
+    int numSeats = scanner.nextInt();
+    scanner.nextLine();
+    System.out.print("Enter date (YYYY-MM-DD, e.g. 2023-05-05): ");
+    try {
+        String input = scanner.nextLine();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(input, formatter);
+        String dateString = date.toString();
+
+        System.out.println("Input date: " + dateString);
+        boolean display = Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,username);
+
+        if (!display) {
+            return;
+        }
+        System.out.println("Enter the trip id");
+        int tripId = scanner.nextInt();
+        Booking book=new Booking(tripId,username,numSeats);
+        book.save(connection);
+        
+
+    } catch (DateTimeParseException e) {
+        System.out.println("Invalid date format. Please enter a valid date in YYYY-MM-DD format.");
+        return;
+    }
+}
+
 
 
  /**
@@ -146,31 +128,31 @@ public class Transactions {
  * @return
  * @throws SQLException
  */
-public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateTimeStr) throws SQLException {
-            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+// public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateTimeStr) throws SQLException {
+//             LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     
-            PreparedStatement statement = connection.prepareStatement(
-                "SELECT t.start_time, t.available_seats, t.trip_id, t.username, u.mobile_number, u.gender, t.car_model " +
-                "FROM Trips t " +
-                "JOIN Users u ON t.username = u.username " +
-                "WHERE t.start_location = ? " +
-                "AND t.end_location = ? " +
-                "AND t.available_seats >= ? " +
-                "AND t.start_time >= ?"
-            );
-            statement.setString(1, startLocation);
-            statement.setString(2, endLocation);
-            statement.setInt(3, numSeats);
-            statement.setTimestamp(4, Timestamp.valueOf(dateTime));
+//             PreparedStatement statement = connection.prepareStatement(
+//                 "SELECT t.start_time, t.available_seats, t.trip_id, t.username, u.mobile_number, u.gender, t.car_model " +
+//                 "FROM Trips t " +
+//                 "JOIN Users u ON t.username = u.username " +
+//                 "WHERE t.start_location = ? " +
+//                 "AND t.end_location = ? " +
+//                 "AND t.available_seats >= ? " +
+//                 "AND t.start_time >= ?"
+//             );
+//             statement.setString(1, startLocation);
+//             statement.setString(2, endLocation);
+//             statement.setInt(3, numSeats);
+//             statement.setTimestamp(4, Timestamp.valueOf(dateTime));
     
-            ResultSet resultSet = statement.executeQuery();
-            if (!resultSet.next()) {
-                System.out.println("\u001B[31mNo cabs are available for this route on this date and time.\u001B[0m");
-                return false;
-            }else{
-                return true;
-            }
-        }
+//             ResultSet resultSet = statement.executeQuery();
+//             if (!resultSet.next()) {
+//                 System.out.println("\u001B[31mNo cabs are available for this route on this date and time.\u001B[0m");
+//                 return false;
+//             }else{
+//                 return true;
+//             }
+//         }
     ////////////////////////////////////////////////////////////////////////
     static boolean isTripListEmpty(Connection connection) throws SQLException {
         boolean isEmpty = true;

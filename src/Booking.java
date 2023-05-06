@@ -24,6 +24,8 @@ public class Booking {
 
         resultSet.close();
         statement.close();
+        Trip trip=new Trip();
+        trip.updateSeats(connection, tripId, numSeats, false);
     }
     public static void displayByUsername(Connection connection, String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(

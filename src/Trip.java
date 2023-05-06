@@ -130,9 +130,9 @@ public class Trip {
         statement.close();
     }
     //////////////////////////////////////////////////////////////////////
-    public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateTimeStr) throws SQLException {
+    public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateStr,String username) throws SQLException {
         try {
-            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     
             PreparedStatement statement = connection.prepareStatement(
                 "SELECT t.start_time, t.available_seats, t.trip_id, t.username, u.mobile_number, u.gender, t.car_model " +
@@ -141,21 +141,23 @@ public class Trip {
                 "WHERE t.start_location = ? " +
                 "AND t.end_location = ? " +
                 "AND t.available_seats >= ? " +
-                "AND t.start_time >= ?"
+                "AND DATE(t.start_time) = ?" +
+                "AND t.Trip_status = 'TRIP CONFIRMED'"//+"AND t.username != ?"
             );
             statement.setString(1, startLocation);
             statement.setString(2, endLocation);
             statement.setInt(3, numSeats);
-            statement.setTimestamp(4, Timestamp.valueOf(dateTime));
+            statement.setDate(4, Date.valueOf(date));
+            //statement.setString(5, username);
     
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-                System.out.println("\u001B[31mNo cabs are available for this route on this date and time.\u001B[0m");
+                System.out.println("\u001B[31mNo cabs are available for this route on this date.\u001B[0m");
                 return false;
             }
     
             System.out.println("\u001B[32m+--------+-----------------------+--------+--------------+--------------+---------------------+\u001B[0m");
-            System.out.printf("\u001B[32m|%-8s|%-23s|%-8s|%-14s|%-14s|%-21s|\u001B[0m\n", "Trip ID", "Driver Name", "Gender", "Contact No", "Car Model", "Start Time");
+            System.out.printf("\u001B[32m|%-8s|%-23s|%-8s|%-14s|%-14s|%-21s|\u001B[0m\n", "Trip ID", "Driver Name", "Gender", "Contact No", "Car Model", "Start Date and Time");
             System.out.println("\u001B[32m+--------+-----------------------+--------+--------------+--------------+---------------------+\u001B[0m");
     
             do {
@@ -166,7 +168,8 @@ public class Trip {
                 String carModel = resultSet.getString("car_model");
                 Timestamp startTime = resultSet.getTimestamp("start_time");
     
-                System.out.printf("\u001B[36m|%-8d|%-23s|%-8s|%-14s|%-14s|%-21s|\u001B[0m\n", tripId, fullName, gender, contactNo, carModel, startTime.toString());
+                String startDateTimeStr = startTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                System.out.printf("\u001B[36m|%-8d|%-23s|%-8s|%-14s|%-14s|%-21s|\u001B[0m\n", tripId, fullName, gender, contactNo, carModel, startDateTimeStr);
             } while (resultSet.next());
     
             System.out.println("\u001B[32m+--------+-----------------------+--------+--------------+--------------+---------------------+\u001B[0m");
@@ -174,10 +177,12 @@ public class Trip {
             return true;
     
         } catch (Exception e) {
-            System.out.println("\u001B[31mInvalid date or time format. Please enter date time in the format yyyy-MM-dd HH:mm:ss.\u001B[0m");
+            System.out.println("\u001B[31mInvalid date format. Please enter date in the format yyyy-MM-dd.\u001B[0m");
             return false;
         }
     }
+    
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     public static void displayByUsername(Connection connection, String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
