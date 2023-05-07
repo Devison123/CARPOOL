@@ -131,7 +131,7 @@ public class User {
                 columnWidths[i] = maxWidth;
             }
     
-            String border = "+" + Arrays.stream(columnWidths).mapToObj(width -> "-".repeat(width + 2)).collect(Collectors.joining("+", "+", "+")) + "%n";
+            String border = "└" + Arrays.stream(columnWidths).mapToObj(width -> "-".repeat(width + 2)).collect(Collectors.joining("+", "+", "+")) + "%n";
             String format = "|" + Arrays.stream(columnWidths).mapToObj(width -> " %-" + width + "s |").collect(Collectors.joining()) + "%n";
     
             System.out.format(border);

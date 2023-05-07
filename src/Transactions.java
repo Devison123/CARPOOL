@@ -158,12 +158,12 @@ public class Transactions {
 
     /////////////////////////////////////////////////////////////////////
     static void removeUser(Connection connection, String username) throws SQLException {
-        User.delete(connection, username);
         System.out.print("Are you sure you want to delete your account!\nPlese enter your password to confirm.");
         String password = scanner.nextLine();
         if (User.checkPassword(connection, username, password)) {
             Trip.delete(connection, username);
             Booking.removeByUsername(connection, username);
+            User.delete(connection, username);
         } else {
             System.out.println("INCORRECT PASSWORD");
         }

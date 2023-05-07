@@ -37,7 +37,7 @@ public class Main {
                     }
 
                     int option;
-
+                    boolean ex = false;
                     do {
                         String[] table = new String[] {
                             "\u001B[36m┌───────────────────────────────┐",
@@ -66,21 +66,29 @@ public class Main {
                                 // code for booking a trip
                                 System.out.println("You chose option 1: BOOK A TRIP");
                                 Transactions.createBooking(connection);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
                             case 2:
                                 // code for adding a trip
                                 System.out.println("You chose option 2: ADD TRIP");
                                 Transactions.addtrip(connection);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
                             case 3:
                                 // code for cancelling a booking
                                 System.out.println("You chose option 3: CANCEL BOOKING");
                                 Transactions.cancelBooking(connection);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
                             case 4:
                                 // code for cancelling a trip
                                 System.out.println("You chose option 4: CANCEL TRIP");
                                 Transactions.cancelTrip(connection);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
                             case 5:
                                 // code for editing account details
@@ -103,6 +111,8 @@ public class Main {
 
                                 System.out.print("Enter your gender: ");
                                 String newGender = scan.nextLine();
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 User user = new User(username);
                                 user.editUser(connection, username, newfirstname, newlastname, newPassword, newEmail,
                                         newMobileNumber, newGender);
@@ -111,24 +121,35 @@ public class Main {
                                 // view trip
                                 System.out.println(username);
                                 Trip.displayByUsername(connection, username);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
                             case 7:
                                 // view booking
                                 Booking.displayByUsername(connection, username);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
                             case 8:
                                 // view my profile
                                 System.out.println("view My profile");
                                 User.profile(connection, username);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
 
                             case 9:
                                 // delete profile
                                 Transactions.removeUser(connection, username);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
+                                ex=true;
                                 break;
                             case 10:
                                 // exit the program
-                                System.out.println("You chose option 8: EXIT");
+                                System.out.println("You chose option 10: EXIT");
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
 
                             default:
@@ -136,7 +157,7 @@ public class Main {
                                 break;
                         }
                         System.out.println(); // add a blank line for readability
-                    } while (option != 10);//
+                    } while (option != 10|| !ex);//
 
                     break;
 

@@ -96,9 +96,9 @@ public class Trip {
                 return false;
             }
     
-            System.out.println("\u001B[32m+--------+-----------------------+--------+--------------+--------------+---------------------+\u001B[0m");
-            System.out.printf("\u001B[32m|%-8s|%-23s|%-8s|%-14s|%-14s|%-21s|\u001B[0m\n", "Trip ID", "Driver Name", "Gender", "Contact No", "Car Model", "Start Date and Time");
-            System.out.println("\u001B[32m+--------+-----------------------+--------+--------------+--------------+---------------------+\u001B[0m");
+            System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
+            System.out.printf("\u001B[32m|%─8s|%─23s|%─8s|%─14s|%─14s|%─21s|\u001B[0m\n", "Trip ID", "Driver Name", "Gender", "Contact No", "Car Model", "Start Date and Time");
+            System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
     
             do {
                 int tripId = resultSet.getInt("trip_id");
@@ -108,11 +108,11 @@ public class Trip {
                 String carModel = resultSet.getString("car_model");
                 Timestamp startTime = resultSet.getTimestamp("start_time");
     
-                String startDateTimeStr = startTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                System.out.printf("\u001B[36m|%-8d|%-23s|%-8s|%-14s|%-14s|%-21s|\u001B[0m\n", tripId, fullName, gender, contactNo, carModel, startDateTimeStr);
+                String startDateTimeStr = startTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy─MM─dd HH:mm"));
+                System.out.printf("\u001B[36m|%─8d|%─23s|%─8s|%─14s|%─14s|%─21s|\u001B[0m\n", tripId, fullName, gender, contactNo, carModel, startDateTimeStr);
             } while (resultSet.next());
     
-            System.out.println("\u001B[32m+--------+-----------------------+--------+--------------+--------------+---------------------+\u001B[0m");
+            System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
     
             return true;
     
@@ -135,9 +135,9 @@ public class Trip {
             return;
         }
     
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+---------------+\u001B[0m");
+        System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
         System.out.printf("\u001B[32m|%-8s|%-17s|%-17s|%-17s|%-21s|%-20s|%-14s|%-15s|\u001B[0m\n", "Trip ID", "Car Model", "Start Location", "End Location", "Start Time", "Available Seats", "Luggage Space", "Trip Status");
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+---------------+\u001B[0m");
+        System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
     
         do {
             int tripId = resultSet.getInt("trip_id");
@@ -152,7 +152,7 @@ public class Trip {
             System.out.printf("\u001B[36m|%-8d|%-17s|%-17s|%-17s|%-21s|%-20d|%-14s|%-15s|\u001B[0m\n", tripId, carModel, startLocation, endLocation, startTime.toString(), availableSeats, luggageSpace, tripStatus);
         } while (resultSet.next());
     
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+---------------+\u001B[0m");
+        System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
         resultSet.close();
         statement.close();
     }
