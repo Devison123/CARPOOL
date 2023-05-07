@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.time.LocalDateTime;
 public class Booking {
     private int tripId;
     private String username;
@@ -27,10 +26,7 @@ public class Booking {
         resultSet.close();
         statement.close();
     }
-    ////
-
-    
-    ////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void displayByUsername(Connection connection, String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
             "SELECT t.trip_id, u.username as Driver, t.car_model, t.start_location, t.end_location, DATE_FORMAT(t.start_time, '%Y-%m-%d %H:%i') as Start_Time, b.booking_id, b.num_seats, b.booking_status " +
@@ -67,37 +63,6 @@ public class Booking {
         resultSet.close();
         statement.close();
     }
-    
-    
-    
-    
-    ////////////////////////////////////////////////////////////////////////////
-    // public static void displayByUsername(Connection connection, String username) throws SQLException {
-    //     PreparedStatement statement = connection.prepareStatement(
-    //             "SELECT * FROM Bookings WHERE username = ?"
-    //     );
-    //     statement.setString(1, username);
-    //     ResultSet resultSet = statement.executeQuery();
-    
-    //     // Print table header
-    //     System.out.println("+----------+----------+-----------+----------------+");
-    //     System.out.println("| Trip ID  | Username | Num Seats | booking_status |");
-    //     System.out.println("+----------+----------+-----------+----------------+");
-    
-    //     // Print table rows
-    //     while (resultSet.next()) {
-    //         int tripId = resultSet.getInt("trip_id");
-    //         int numSeats = resultSet.getInt("num_seats");
-    //         String booking_status = resultSet.getString("booking_status");
-    //         System.out.printf("| %-8d | %-8s | %-9d | %-14s |\n", tripId, username, numSeats,booking_status);
-    //     }
-    
-    //     // Print table footer
-    //     System.out.println("+----------+----------+-----------+----------------+");
-    
-    //     resultSet.close();
-    //     statement.close();
-    // }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void cancelBooking(Connection connection, int trip_id) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -145,5 +110,15 @@ public class Booking {
         
         return numSeats;
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static void removeByUsername(Connection connection, String username) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+            "DELETE FROM Bookings WHERE username = ?"
+        );
+        statement.setString(1, username);
+        statement.executeUpdate();
+        statement.close();
+    }
+    
     
 }

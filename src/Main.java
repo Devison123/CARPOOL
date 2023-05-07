@@ -1,5 +1,5 @@
 import java.sql.*;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -10,13 +10,21 @@ public class Main {
         int choice = 0;
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
-            System.out.println("+--------------------+");
-            System.out.println("|       MENU         |");
-            System.out.println("+--------------------+");
-            System.out.println("| 1) LOGIN           |");
-            System.out.println("| 2) SIGN UP         |");
-            System.out.println("| 3) EXIT            |");
-            System.out.println("+--------------------+");
+            String[] menu = {
+                "\u001B[32m┌─────────────────────┐\u001B[0m",
+                "\u001B[32m│\u001B[36m         MENU        \u001B[32m│\u001B[0m",
+                "\u001B[32m├─────────────────────┤\u001B[0m",
+                "\u001B[32m│\u001B[36m 1) LOGIN            \u001B[32m│\u001B[0m",
+                "\u001B[32m│\u001B[36m 2) SIGN UP          \u001B[32m│\u001B[0m",
+                "\u001B[32m│\u001B[36m 3) EXIT             \u001B[32m│\u001B[0m",
+                "\u001B[32m└─────────────────────┘\u001B[0m"
+            };
+            
+
+            
+            
+            Transactions.clearAndPrintTable(menu);
+            
             System.out.print("Your choice : ");
             choice = Integer.parseInt(scan.nextLine());
             switch (choice) {
@@ -31,30 +39,25 @@ public class Main {
                     int option;
 
                     do {
-                        System.out.println("\u001B[36m" + "+-------------------------------+" + "\u001B[0m");
-                        System.out.println("\u001B[36m" + "|           MAIN MENU           |" + "\u001B[0m");
-                        System.out.println("\u001B[36m" + "+-------------------------------+" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m1) BOOK A TRIP           \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m2) ADD TRIP              \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m3) CANCEL BOOKING        \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m4) CANCEL TRIP           \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m5) EDIT ACCOUNT DETAILS  \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m6) VIEW MY TRIP          \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m7) VIEW MY BOOKING       \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[33m" + "| \u001B[0m8) VIEW MY PROFILE       \u001B[33m|" + "\u001B[0m");
-                        System.out.println(
-                            "\u001B[31m" + "| \u001B[0m9) EXIT                  \u001B[31m|" + "\u001B[0m");
-                        System.out.println("\u001B[36m" + "+-------------------------------+" + "\u001B[0m");
+                        String[] table = new String[] {
+                            "\u001B[36m┌───────────────────────────────┐",
+                            "│           MAIN MENU           │",
+                            "├───────────────────────────────┤",
+                            "│ \u001B[32m1) BOOK A TRIP                \u001B[36m│",
+                            "│ \u001B[32m2) ADD TRIP                   \u001B[36m│",
+                            "│ \u001B[32m3) CANCEL BOOKING             \u001B[36m│",
+                            "│ \u001B[32m4) CANCEL TRIP                \u001B[36m│",
+                            "│ \u001B[32m5) EDIT ACCOUNT DETAILS       \u001B[36m│",
+                            "│ \u001B[32m6) VIEW MY TRIP               \u001B[36m│",
+                            "│ \u001B[32m7) VIEW MY BOOKING            \u001B[36m│",
+                            "│ \u001B[32m8) VIEW MY ACCOUNT            \u001B[36m│",
+                            "│ \u001B[32m9) DELETE MY ACCOUNT          \u001B[36m│",
+                            "│ \u001B[32m10) EXIT                      \u001B[36m│",
+                            "└───────────────────────────────┘\u001B[0m"
+                        };
                         
-
+                        Transactions.clearAndPrintTable(table);
+                        
                         System.out.print("Your choice : ");
                         option = Integer.parseInt(scan.nextLine());
 
@@ -98,9 +101,9 @@ public class Main {
                                 System.out.print("Enter new mobile number: ");
                                 String newMobileNumber = scan.nextLine();
 
-                                System.out.print("Enter new gender: ");
+                                System.out.print("Enter your gender: ");
                                 String newGender = scan.nextLine();
-                                User user=new User(username);
+                                User user = new User(username);
                                 user.editUser(connection, username, newfirstname, newlastname, newPassword, newEmail,
                                         newMobileNumber, newGender);
                                 break;
@@ -113,7 +116,6 @@ public class Main {
                                 // view booking
                                 Booking.displayByUsername(connection, username);
                                 break;
-
                             case 8:
                                 // view my profile
                                 System.out.println("view My profile");
@@ -121,7 +123,11 @@ public class Main {
                                 break;
 
                             case 9:
-                            // exit the program
+                                // delete profile
+                                Transactions.removeUser(connection, username);
+                                break;
+                            case 10:
+                                // exit the program
                                 System.out.println("You chose option 8: EXIT");
                                 break;
 
@@ -130,16 +136,16 @@ public class Main {
                                 break;
                         }
                         System.out.println(); // add a blank line for readability
-                    } while (option != 8);//
+                    } while (option != 10);//
 
                     break;
 
                 case 2:
                     Transactions.register(connection);
                     break;
-                
+
                 case 3:
-                System.out.println("Exiting.....");
+                    System.out.println("Exiting.....");
             }
         } while (choice != 3);
 

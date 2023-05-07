@@ -1,7 +1,5 @@
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Trip {
@@ -55,10 +53,10 @@ public class Trip {
         
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static void delete(Connection connection, int tripId) throws SQLException {
+    public static void delete(Connection connection,  String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM Trips WHERE trip_id = ?");
-        statement.setInt(1, tripId);
+            "DELETE FROM Trips WHERE username = ?");
+        statement.setString(1, username);
         statement.executeUpdate();
         statement.close();
     }
@@ -137,9 +135,9 @@ public class Trip {
             return;
         }
     
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+\u001B[0m");
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+---------------+\u001B[0m");
         System.out.printf("\u001B[32m|%-8s|%-17s|%-17s|%-17s|%-21s|%-20s|%-14s|%-15s|\u001B[0m\n", "Trip ID", "Car Model", "Start Location", "End Location", "Start Time", "Available Seats", "Luggage Space", "Trip Status");
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+\u001B[0m");
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+---------------+\u001B[0m");
     
         do {
             int tripId = resultSet.getInt("trip_id");
@@ -154,7 +152,7 @@ public class Trip {
             System.out.printf("\u001B[36m|%-8d|%-17s|%-17s|%-17s|%-21s|%-20d|%-14s|%-15s|\u001B[0m\n", tripId, carModel, startLocation, endLocation, startTime.toString(), availableSeats, luggageSpace, tripStatus);
         } while (resultSet.next());
     
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+\u001B[0m");
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+---------------+\u001B[0m");
         resultSet.close();
         statement.close();
     }
