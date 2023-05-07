@@ -190,7 +190,8 @@ static void cancelTrip(Connection connection)throws SQLException{
 }
 static void cancelBooking(Connection connection)throws SQLException{
     Booking.displayByUsername(connection, username);
-    System.out.print("Enter the booking id you want to cancel");
+    System.out.println();
+    System.out.print("Enter the booking id you want to cancel : ");
     int tripId = Integer.parseInt(scanner.nextLine());
     Booking.cancelBooking(connection,tripId);
     if(Booking.doesBookingExist(connection, tripId)){

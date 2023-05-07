@@ -24,7 +24,7 @@ public class Main {
                     loggedin = Transactions.login(connection);
                     username = Transactions.username;
                     if (!loggedin) {
-                        System.out.println("/nTry again / Try registering");
+                        System.out.println("\nTry again / Try registering");
                         break;
                     }
 
@@ -35,22 +35,25 @@ public class Main {
                         System.out.println("\u001B[36m" + "|           MAIN MENU           |" + "\u001B[0m");
                         System.out.println("\u001B[36m" + "+-------------------------------+" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[33m" + "| \u001B[0m1) BOOK A TRIP           \u001B[33m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m1) BOOK A TRIP           \u001B[33m|" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[33m" + "| \u001B[0m2) ADD TRIP              \u001B[33m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m2) ADD TRIP              \u001B[33m|" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[33m" + "| \u001B[0m3) CANCEL BOOKING        \u001B[33m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m3) CANCEL BOOKING        \u001B[33m|" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[33m" + "| \u001B[0m4) CANCEL TRIP           \u001B[33m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m4) CANCEL TRIP           \u001B[33m|" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[33m" + "| \u001B[0m5) EDIT ACCOUNT DETAILS  \u001B[33m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m5) EDIT ACCOUNT DETAILS  \u001B[33m|" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[33m" + "| \u001B[0m6) VIEW MY TRIP          \u001B[33m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m6) VIEW MY TRIP          \u001B[33m|" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[33m" + "| \u001B[0m7) VIEW MY BOOKING       \u001B[33m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m7) VIEW MY BOOKING       \u001B[33m|" + "\u001B[0m");
                         System.out.println(
-                                "\u001B[31m" + "| \u001B[0m8) EXIT                  \u001B[31m|" + "\u001B[0m");
+                            "\u001B[33m" + "| \u001B[0m8) VIEW MY PROFILE       \u001B[33m|" + "\u001B[0m");
+                        System.out.println(
+                            "\u001B[31m" + "| \u001B[0m9) EXIT                  \u001B[31m|" + "\u001B[0m");
                         System.out.println("\u001B[36m" + "+-------------------------------+" + "\u001B[0m");
+                        
 
                         System.out.print("Your choice : ");
                         option = Integer.parseInt(scan.nextLine());
@@ -112,7 +115,13 @@ public class Main {
                                 break;
 
                             case 8:
-                                // exit the program
+                                // view my profile
+                                System.out.println("view My profile");
+                                User.profile(connection, username);
+                                break;
+
+                            case 9:
+                            // exit the program
                                 System.out.println("You chose option 8: EXIT");
                                 break;
 

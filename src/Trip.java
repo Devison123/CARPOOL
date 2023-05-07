@@ -62,66 +62,7 @@ public class Trip {
         statement.executeUpdate();
         statement.close();
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, Timestamp date) throws SQLException {
-    //     try {
-    //         // Splitting the given timestamp into year, month, day, and time components
-    //         LocalDate localDate = date.toLocalDateTime().toLocalDate();
-    //         LocalTime localTime = date.toLocalDateTime().toLocalTime();
-    //         int year = localDate.getYear();
-    //         int month = localDate.getMonthValue();
-    //         int day = localDate.getDayOfMonth();
-    //         String time = localTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-    
-    //         PreparedStatement statement = connection.prepareStatement(
-    //                 "SELECT t.start_time, t.available_seats, t.trip_id, t.username, u.mobile_number, u.gender, t.car_model " +
-    //                 "FROM Trips t " +
-    //                 "JOIN Users u ON t.username = u.username " +
-    //                 "WHERE t.start_location = ? " +
-    //                 "AND t.end_location = ? " +
-    //                 "AND t.available_seats >= ? " +
-    //                 "AND t.start_time >= ? " +
-    //                 "AND t.start_time <= DATE_ADD(?, INTERVAL 1 HOUR)"
-                
-    //         );
-    //         statement.setString(1, startLocation);
-    //         statement.setString(2, endLocation);
-    //         statement.setInt(3, numSeats);
-    //         statement.setString(4, year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day) + " " + time);
-    //         statement.setString(5, time);
-    
-    //         ResultSet resultSet = statement.executeQuery();
-    //         if (!resultSet.next()) {
-    //             System.out.println("\u001B[31mNo cabs are available for this route on this date and time.\u001B[0m");
-    //             return false;
-    //         }
-    
-    //         System.out.println("\u001B[32m+--------+-----------------------+--------+--------+--------------+---------------------+\u001B[0m");
-    //         System.out.printf("\u001B[32m|%-8s|%-23s|%-8s|%-8s|%-14s|%-21s|\u001B[0m\n", "Trip ID", "Driver Name", "Gender", "Contact No", "Car Model", "Start Time");
-    //         System.out.println("\u001B[32m+--------+-----------------------+--------+--------+--------------+---------------------+\u001B[0m");
-    
-    //         do {
-    //             int tripId = resultSet.getInt("trip_id");
-    //             String fullName = resultSet.getString("username");
-    //             String gender = resultSet.getString("gender");
-    //             String contactNo = resultSet.getString("mobile_number");
-    //             String carModel = resultSet.getString("car_model");
-    //             Timestamp startTime = resultSet.getTimestamp("start_time");
-    
-    //             System.out.printf("\u001B[36m|%-8d|%-23s|%-8s|%-8s|%-14s|%-21s|\u001B[0m\n", tripId, fullName, gender, contactNo, carModel, startTime.toString());
-    //         } while (resultSet.next());
-    
-    //         System.out.println("\u001B[32m+--------+-----------------------+--------+--------+--------------+---------------------+\u001B[0m");
-    //         resultSet.close();
-    //         statement.close();
-    
-    //         return true;
-    
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return false;
-    //     }
-    // }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void cancelTrip(Connection connection, int tripId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -196,9 +137,9 @@ public class Trip {
             return;
         }
     
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+\u001B[0m");
-        System.out.printf("\u001B[32m|%-8s|%-17s|%-17s|%-17s|%-21s|%-20s|%-14s|\u001B[0m\n", "Trip ID", "Car Model", "Start Location", "End Location", "Start Time", "Available Seats", "Luggage Space");
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+\u001B[0m");
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+\u001B[0m");
+        System.out.printf("\u001B[32m|%-8s|%-17s|%-17s|%-17s|%-21s|%-20s|%-14s|%-15s|\u001B[0m\n", "Trip ID", "Car Model", "Start Location", "End Location", "Start Time", "Available Seats", "Luggage Space", "Trip Status");
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+\u001B[0m");
     
         do {
             int tripId = resultSet.getInt("trip_id");
@@ -208,16 +149,15 @@ public class Trip {
             Timestamp startTime = resultSet.getTimestamp("start_time");
             int availableSeats = resultSet.getInt("available_seats");
             boolean luggageSpace = resultSet.getBoolean("luggage_space");
+            String tripStatus = resultSet.getString("trip_status");
     
-            System.out.printf("\u001B[36m|%-8d|%-17s|%-17s|%-17s|%-21s|%-20d|%-14s|\u001B[0m\n", tripId, carModel, startLocation, endLocation, startTime.toString(), availableSeats, luggageSpace);
+            System.out.printf("\u001B[36m|%-8d|%-17s|%-17s|%-17s|%-21s|%-20d|%-14s|%-15s|\u001B[0m\n", tripId, carModel, startLocation, endLocation, startTime.toString(), availableSeats, luggageSpace, tripStatus);
         } while (resultSet.next());
     
-        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+\u001B[0m");
+        System.out.println("\u001B[32m+--------+-----------------+-----------------+-----------------+---------------------+--------------------+--------------+---------------+\u001B[0m");
         resultSet.close();
         statement.close();
     }
-    
-
 
 }
 
