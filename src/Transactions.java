@@ -144,6 +144,11 @@ public class Transactions {
 
     ////////////////////////////////////////////////////////////////////////////////
     static void cancelBooking(Connection connection) throws SQLException {
+        if(!Booking.BookingExist(connection, username)){
+            System.out.print("There is no booking listed in this username");
+            System.out.println("press enter to continue ");
+            return;
+        }
         Booking.displayByUsername(connection, username);
         System.out.println();
         System.out.print("Enter the booking id you want to cancel : ");

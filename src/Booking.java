@@ -82,7 +82,7 @@ public class Booking {
     //////////////////////////////////////////////////////////////////////////////////////////////
     public static boolean doesBookingExist(Connection connection, int tripId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
-                "SELECT COUNT(*) as count FROM Bookings WHERE trip_id = ?"
+                "SELECT COUNT(*) as count FROM Bookings WHERE trip_id = ? "
         );
         statement.setInt(1, tripId);
         ResultSet resultSet = statement.executeQuery();
@@ -119,6 +119,18 @@ public class Booking {
         statement.executeUpdate();
         statement.close();
     }
-    
+   ////////////////////////////////////////////////////////////////
+   public static boolean BookingExist(Connection connection,String username) throws SQLException {
+    PreparedStatement statement = connection.prepareStatement(
+            "SELECT COUNT(*) as count FROM Bookings WHERE  username= ? AND booking_status !='CANCELLED'"
+    );
+    statement.setString(1, username);
+    ResultSet resultSet = statement.executeQuery();
+    resultSet.next();
+    int count = resultSet.getInt("count");
+    resultSet.close();
+    statement.close();
+    return count > 0;
+}   
     
 }

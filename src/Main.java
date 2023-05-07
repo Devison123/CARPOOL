@@ -148,8 +148,7 @@ public class Main {
                             case 10:
                                 // exit the program
                                 System.out.println("You chose option 10: EXIT");
-                                System.out.println("Press Enter to continue : ");
-                                scan.nextLine();
+                                
                                 break;
 
                             default:
