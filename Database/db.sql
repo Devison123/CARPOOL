@@ -1,8 +1,12 @@
-drop database carpoolApp;
 CREATE DATABASE carpoolApp;
 
 USE carpoolApp;
-
+CREATE TABLE Admin(
+	Admin_id INT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    FOREIGN KEY(username) REFERENCES Users(username) 
+	);
 CREATE TABLE Users (
     username VARCHAR(50) PRIMARY KEY,
     firstname VARCHAR(50) NOT NULL,
@@ -34,7 +38,3 @@ CREATE TABLE Bookings (
     FOREIGN KEY (trip_id) REFERENCES Trips(trip_id),
     FOREIGN KEY (username) REFERENCES Users(username)
 );
-desc trips;
-desc bookings;
-insert into users values("daniel","1234","daniel@","1234567","m");
-SELECT COUNT(*) FROM Users WHERE username = "daniel";
