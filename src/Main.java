@@ -133,7 +133,7 @@ public class Main {
                             case 8:
                                 // view my profile
                                 System.out.println("view My profile");
-                                User.profile(connection, username);
+                                Transactions.clearAndPrintTable(User.profile(connection, username));
                                 System.out.println("Press Enter to continue : ");
                                 scan.nextLine();
                                 break;
@@ -143,12 +143,11 @@ public class Main {
                                 Transactions.removeUser(connection, username);
                                 System.out.println("Press Enter to continue : ");
                                 scan.nextLine();
-                                ex=true;
+                                option=10;
                                 break;
                             case 10:
                                 // exit the program
                                 System.out.println("You chose option 10: EXIT");
-                                
                                 break;
 
                             default:
@@ -156,7 +155,7 @@ public class Main {
                                 break;
                         }
                         System.out.println(); // add a blank line for readability
-                    } while (option != 10|| !ex);//
+                    } while (option != 10);//
 
                     break;
 

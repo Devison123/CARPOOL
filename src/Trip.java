@@ -70,35 +70,34 @@ public class Trip {
         statement.close();
     }
     //////////////////////////////////////////////////////////////////////
-    public static boolean displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateStr,String username) throws SQLException {
+    public static String[] displayByLocations(Connection connection, String startLocation, String endLocation, int numSeats, String dateStr, String username) throws SQLException {
         try {
             LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     
             PreparedStatement statement = connection.prepareStatement(
-                "SELECT t.start_time, t.available_seats, t.trip_id, t.username, u.mobile_number, u.gender, t.car_model " +
-                "FROM Trips t " +
-                "JOIN Users u ON t.username = u.username " +
-                "WHERE t.start_location = ? " +
-                "AND t.end_location = ? " +
-                "AND t.available_seats >= ? " +
-                "AND DATE(t.start_time) = ?" +
-                "AND t.Trip_status = 'TRIP CONFIRMED'"//+"AND t.username != ?"
+                    "SELECT t.start_time, t.available_seats, t.trip_id, t.username, u.mobile_number, u.gender, t.car_model " +
+                            "FROM Trips t " +
+                            "JOIN Users u ON t.username = u.username " +
+                            "WHERE t.start_location = ? " +
+                            "AND t.end_location = ? " +
+                            "AND t.available_seats >= ? " +
+                            "AND DATE(t.start_time) = ?" +
+                            "AND t.Trip_status = 'TRIP CONFIRMED'"
             );
             statement.setString(1, startLocation);
             statement.setString(2, endLocation);
             statement.setInt(3, numSeats);
             statement.setDate(4, Date.valueOf(date));
-            //statement.setString(5, username);
     
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-                System.out.println("\u001B[31mNo cabs are available for this route on this date.\u001B[0m");
-                return false;
+                return new String[] {"No cabs are available for this route on this date."};
             }
     
-            System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
-            System.out.printf("\u001B[32m|%─8s|%─23s|%─8s|%─14s|%─14s|%─21s|\u001B[0m\n", "Trip ID", "Driver Name", "Gender", "Contact No", "Car Model", "Start Date and Time");
-            System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
+            StringBuilder output = new StringBuilder();
+            output.append("┌────────────────┬───────────────────────────┬─────────────┬───────────────────────┬─────────────────────┬─────────────────────────┐\n");
+            output.append(String.format("│ %-15s│ %-26s│ %-12s│ %-22s│ %-20s│ %-24s│\n", "Trip ID", "Driver Name", "Gender", "Contact No", "Car Model", "Start Date and Time"));
+            output.append("├────────────────┼───────────────────────────┼─────────────┼───────────────────────┼─────────────────────┼─────────────────────────┤\n");
     
             do {
                 int tripId = resultSet.getInt("trip_id");
@@ -109,18 +108,17 @@ public class Trip {
                 Timestamp startTime = resultSet.getTimestamp("start_time");
     
                 String startDateTimeStr = startTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy─MM─dd HH:mm"));
-                System.out.printf("\u001B[36m|%─8d|%─23s|%─8s|%─14s|%─14s|%─21s|\u001B[0m\n", tripId, fullName, gender, contactNo, carModel, startDateTimeStr);
+                output.append(String.format("│ %-13d│ %-23s│ %-8s│ %-11s│ %-11s│ %-21s│\n", tripId, fullName, gender, contactNo, carModel, startDateTimeStr));
             } while (resultSet.next());
+            output.append("└────────────────┴───────────────────────────┴─────────────┴───────────────────────┴─────────────────────┴─────────────────────────┘\n");
     
-            System.out.println("\u001B[32m────────────────────────────────────────────────────────────────────────────────────────\u001B[0m");
-    
-            return true;
+            return output.toString().split("\n");
     
         } catch (Exception e) {
-            System.out.println("\u001B[31mInvalid date format. Please enter date in the format yyyy-MM-dd.\u001B[0m");
-            return false;
+            return new String[] {"Invalid date format. Please enter date in the format yyyy-MM-dd."};
         }
     }
+    
     
 
     //////////////////////////////////////////////////////////////////////////////////////////////

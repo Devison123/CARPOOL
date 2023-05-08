@@ -100,18 +100,17 @@ public class Transactions {
             LocalDate date = LocalDate.parse(input, formatter);
             String dateString = date.toString();
 
-            System.out.println("Input date: " + dateString);
-            boolean display = Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
-                    username);
-
-            if (!display) {
-                return;
-            }
+            System.out.println("Input date: " + dateString);      
+            clearAndPrintTable(Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
+            username));
+            if(Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
+            username).length!=1){ 
             System.out.println("Enter the trip id");
             int tripId = scanner.nextInt();
             Booking book = new Booking(tripId, username, numSeats);
             book.save(connection);
             Trip.updateSeats(connection, tripId, numSeats, false);
+            }
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please enter a valid date in YYYY-MM-DD format.");
             return;

@@ -1,7 +1,4 @@
 import java.sql.*;
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class User {
 
     private String username;
@@ -29,24 +26,7 @@ public class User {
     public String getUsername() {
         return username;
     }
-    private String getGender() {
-        return gender;
-    }
-    private String getEmail() {
-        return email;
-    }
-    private String getMobileNumber() {
-        return mobileNumber;
-    }
-    private String getLastName() {
-        return lastname;
-    }
-    private String getFirstname() {
-        return firstname;
-    }
-    private String getPassword() {
-        return "******";
-    }
+
 /////////////////////////////////////////////////////////////////////////////
     public void save(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -90,11 +70,12 @@ public class User {
         return count > 0;
     }
     ////////////////////////////////////////////////////////////////////////////////
-    public static void profile(Connection connection, String username) throws SQLException {
-        User user = null;
+    public static String[] profile(Connection connection, String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM Users WHERE username = ?");
         statement.setString(1, username);
         ResultSet resultSet = statement.executeQuery();
+        
+        String[] userDetails = null;
         if (resultSet.next()) {
             String password = resultSet.getString("password");
             String firstname = resultSet.getString("firstname");
@@ -102,55 +83,42 @@ public class User {
             String email = resultSet.getString("email");
             String mobileNumber = resultSet.getString("mobile_number");
             String gender = resultSet.getString("gender");
-            user = new User(username, firstname, lastname, password, email, mobileNumber, gender);
+            userDetails = new String[] {username, password, firstname, lastname, email, mobileNumber, gender};
         }
+        
         resultSet.close();
         statement.close();
-    
-        if (user != null) {
-            String[][] table = {
-                {" "," "},
-                {"Username", user.getUsername()},
-                {"Password", user.getPassword()},
-                {"First Name", user.getFirstname()},
-                {"Last Name", user.getLastName()},
-                {"Email", user.getEmail()},
-                {"Mobile Number", user.getMobileNumber()},
-                {"Gender", user.getGender()}
-            };
-    
-            int[] columnWidths = new int[table[0].length];
-            for (int i = 0; i < columnWidths.length; i++) {
-                int maxWidth = 0;
-                for (int j = 0; j < table.length; j++) {
-                    String value = table[j][i];
-                    if (value != null && value.length() > maxWidth) {
-                        maxWidth = value.length();
-                    }
-                }
-                columnWidths[i] = maxWidth;
-            }
-    
-            String border = "└" + Arrays.stream(columnWidths).mapToObj(width -> "-".repeat(width + 2)).collect(Collectors.joining("+", "+", "+")) + "%n";
-            String format = "|" + Arrays.stream(columnWidths).mapToObj(width -> " %-" + width + "s |").collect(Collectors.joining()) + "%n";
-    
-            System.out.format(border);
-            System.out.format(format, (Object[]) table[0]);
-            System.out.format(border);
-    
-            for (int i = 1; i < table.length; i++) {
-                String[] row = table[i];
-                Object[] formattedRow = new Object[row.length];
-                for (int j = 0; j < row.length; j++) {
-                    String value = row[j];
-                    formattedRow[j] = (value != null) ? value : "";
-                }
-                System.out.format(format, formattedRow);
-            }
-    
-            System.out.format(border);
-        }
+        
+        // construct table with borders
+        String[] table = new String[] {
+            "\u001B[36m┌─────────────┬─────────────────┐",
+            "│        USER PROFILE           │",
+            "├─────────────┼─────────────────┤",
+            "│ USERNAME    │ " + padRight(userDetails[0], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ PASSWORD    │ " + padRight("******", 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ FIRST NAME  │ " + padRight(userDetails[2], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ LAST NAME   │ " + padRight(userDetails[3], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ EMAIL       │ " + padRight(userDetails[4], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ MOBILE NO.  │ " + padRight(userDetails[5], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ GENDER      │ " + padRight(userDetails[6], 16) + "│",
+            "└─────────────┴─────────────────┘\u001B[0m"
+        };
+        
+        return table;
     }
+    
+    // helper method to pad string to the right with spaces
+    public static String padRight(String s, int n) {
+        return String.format("%-" + n + "s", s);
+    }
+    
+    
     
 
     //////////////////////////////////////////////////////////////////////////////
