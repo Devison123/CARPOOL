@@ -108,7 +108,7 @@ public class Trip {
                 Timestamp startTime = resultSet.getTimestamp("start_time");
     
                 String startDateTimeStr = startTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy─MM─dd HH:mm"));
-                output.append(String.format("│ %-13d│ %-23s│ %-8s│ %-11s│ %-11s│ %-21s│\n", tripId, fullName, gender, contactNo, carModel, startDateTimeStr));
+                output.append(String.format("│ %-15s│ %-26s│ %-12s│ %-22s│ %-20s│ %-24s│\n", tripId, fullName, gender, contactNo, carModel, startDateTimeStr));
             } while (resultSet.next());
             output.append("└────────────────┴───────────────────────────┴─────────────┴───────────────────────┴─────────────────────┴─────────────────────────┘\n");
     

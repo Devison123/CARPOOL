@@ -7,24 +7,34 @@ import java.util.Scanner;
 public class Transactions {
     static Scanner scanner = new Scanner(System.in);
     static String username;
-
     /////////////////////////////////////////////////////////////////////////////////////
-    static boolean login(Connection connection) throws SQLException {
+    static int login(Connection connection) throws SQLException {
         System.out.println("LOGIN");
         System.out.print("Enter username: ");
         username = scanner.nextLine();
         if (!User.checkUsernameExists(connection, username)) {
+            if(Admin.checkUsernameExists(connection, username)){
+                System.out.print("Enter password: ");
+                String password = scanner.nextLine();
+                if(Admin.checkPassword(connection, username, password)){
+                    System.out.println("Welcome admin");
+                    return 2;
+                }else {
+                    System.out.println("INCORRECT PASSWORD");
+                    return 0;
+                }
+            }
             System.out.print("Username does not exists");
-            return false;
+            return 0;
         } else {
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
             if (User.checkPassword(connection, username, password)) {
                 System.out.println("Signed in successfully");
-                return true;
+                return 1;
             } else {
                 System.out.println("INCORRECT PASSWORD");
-                return false;
+                return 0;
             }
         }
     }
@@ -112,8 +122,7 @@ public class Transactions {
     //////////////////////////////////////////////////////////////////////////////////////
     static void createBooking(Connection connection) throws SQLException {
         // Take input from the user for tripId, riderId, and numSeats
-        boolean trip = isTripListEmpty(connection);
-        if (trip) {
+        if (isTripListEmpty(connection)) {
             System.out.println("No trip is Registered. Try again later");
             return;
         }
@@ -135,22 +144,26 @@ public class Transactions {
         System.out.print("Enter date (YYYY-MM-DD, e.g. 2023-05-05): ");
         try {
             String input = scanner.nextLine();
-
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate date = LocalDate.parse(input, formatter);
             String dateString = date.toString();
-
-            System.out.println("Input date: " + dateString);      
+            System.out.println("Input date : " + dateString);      
             clearAndPrintTable(Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
             username));
+            System.out.println("Enter return to choose trip or enter E to exit : ");
+            String z = scanner.nextLine();
+            if(z.equalsIgnoreCase("e")){
+                return;
+            }else{
             if(Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
-            username).length!=1){ 
-            System.out.println("Enter the trip id");
+            username).length!=1 ){ 
+            System.out.println("Enter the trip id of your choice : ");
             int tripId = scanner.nextInt();
             Booking book = new Booking(tripId, username, numSeats);
             book.save(connection);
             Trip.updateSeats(connection, tripId, numSeats, false);
             }
+        }
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please enter a valid date in YYYY-MM-DD format.");
             return;
@@ -255,9 +268,4 @@ public class Transactions {
         }
     }
     
-    
-    
-    
-    
-
 }

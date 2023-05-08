@@ -6,58 +6,27 @@ public class Main {
         Connection connection = Database.connect();
         Scanner scan = new Scanner(System.in);
         String username;
-        boolean loggedin = false;
+        int loggedin;
         int choice = 0;
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
-            String[] menu = {
-                    "\u001B[32m┌─────────────────────┐\u001B[0m",
-                    "\u001B[32m│\u001B[36m         MENU        \u001B[32m│\u001B[0m",
-                    "\u001B[32m├─────────────────────┤\u001B[0m",
-                    "\u001B[32m│\u001B[36m 1) LOGIN            \u001B[32m│\u001B[0m",
-                    "\u001B[32m│\u001B[36m 2) SIGN UP          \u001B[32m│\u001B[0m",
-                    "\u001B[32m│\u001B[36m 3) EXIT             \u001B[32m│\u001B[0m",
-                    "\u001B[32m└─────────────────────┘\u001B[0m"
-            };
-
-            Transactions.clearAndPrintTable(menu);
-
+            Transactions.clearAndPrintTable(Menu.mainMenu);
             System.out.print("Your choice : ");
             choice = Integer.parseInt(scan.nextLine());
             switch (choice) {
                 case 1:
                     loggedin = Transactions.login(connection);
                     username = Transactions.username;
-                    if (!loggedin) {
+                    if (loggedin==0) {
                         System.out.println("\nTry again / Try registering");
                         break;
                     }
-
-                    int option;
-                    boolean ex = false;
+                    else if(loggedin==1){
+                        int option;
                     do {
-                        String[] table = new String[] {
-                                "\u001B[36m┌───────────────────────────────┐",
-                                "│           MAIN MENU           │",
-                                "├───────────────────────────────┤",
-                                "│ \u001B[32m1) BOOK A TRIP                \u001B[36m│",
-                                "│ \u001B[32m2) ADD TRIP                   \u001B[36m│",
-                                "│ \u001B[32m3) CANCEL BOOKING             \u001B[36m│",
-                                "│ \u001B[32m4) CANCEL TRIP                \u001B[36m│",
-                                "│ \u001B[32m5) EDIT ACCOUNT DETAILS       \u001B[36m│",
-                                "│ \u001B[32m6) VIEW MY TRIP               \u001B[36m│",
-                                "│ \u001B[32m7) VIEW MY BOOKING            \u001B[36m│",
-                                "│ \u001B[32m8) VIEW MY ACCOUNT            \u001B[36m│",
-                                "│ \u001B[32m9) DELETE MY ACCOUNT          \u001B[36m│",
-                                "│ \u001B[32m10) EXIT                      \u001B[36m│",
-                                "└───────────────────────────────┘\u001B[0m"
-                        };
-
-                        Transactions.clearAndPrintTable(table);
-
+                        Transactions.clearAndPrintTable(Menu.userMenu);
                         System.out.print("Your choice : ");
                         option = Integer.parseInt(scan.nextLine());
-
                         switch (option) {
                             case 1:
                                 // code for booking a trip
@@ -153,14 +122,60 @@ public class Main {
                                 break;
 
                             default:
-                                System.out.println("Invalid choice. Please enter a number between 1 and 8.");
+                                System.out.println("Invalid choice. Please enter a number between 1 and 10.");
                                 break;
                         }
                         System.out.println(); // add a blank line for readability
                     } while (option != 10);//
-
+                    }
+                    else if(loggedin==2){
+                        int z;
+                        do {
+                            Transactions.clearAndPrintTable(Menu.adminMenu);
+                            System.out.print("Your choice : ");
+                            z = Integer.parseInt(scan.nextLine());
+                            switch (z) {
+                                case 1:
+                                    // code for booking a trip
+                                    System.out.println("You chose option 1: ANALYTICS");
+                                    Analytics.analysis();
+                                    System.out.println("Press Enter to continue : ");
+                                    scan.nextLine();
+                                    break;
+                                case 2:
+                                    // code for adding a trip
+                                    System.out.println("You chose option 2: ADD TRIP");
+                                    Transactions.addtrip(connection);
+                                    System.out.println("Press Enter to continue : ");
+                                    scan.nextLine();
+                                    break;
+                                case 3:
+                                    // code for cancelling a booking
+                                    System.out.println("You chose option 3: CANCEL BOOKING");
+                                    Transactions.cancelBooking(connection);
+                                    System.out.println("Press Enter to continue : ");
+                                    scan.nextLine();
+                                    break;
+                                case 4:
+                                    // code for cancelling a trip
+                                    System.out.println("You chose option 4: CANCEL TRIP");
+                                    Transactions.cancelTrip(connection);
+                                    System.out.println("Press Enter to continue : ");
+                                    scan.nextLine();
+                                    break;
+                                case 5:
+                                    // exit the program
+                                    System.out.println("You chose option 10: EXIT");
+                                    break;
+    
+                                default:
+                                    System.out.println("Invalid choice. Please enter a number between 1 and 5.");
+                                    break;
+                            }
+                            System.out.println(); // add a blank line for readability
+                        } while (z != 5);
+                    }
                     break;
-
                 case 2:
                     Transactions.register(connection);
                     break;

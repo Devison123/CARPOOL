@@ -4,7 +4,7 @@ import java.sql.*;
 public class Analytics {
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void analysis() {
         Analytics analytics = new Analytics();
         boolean quit = false;
         while (!quit) {

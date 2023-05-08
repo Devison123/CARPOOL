@@ -117,10 +117,6 @@ public class User {
     public static String padRight(String s, int n) {
         return String.format("%-" + n + "s", s);
     }
-    
-    
-    
-
     //////////////////////////////////////////////////////////////////////////////
     public void editUser(Connection connection,String username,String newfirstname,String newlastname, String newPassword, String newEmail, String newMobileNumber, String newGender) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -153,13 +149,6 @@ public class User {
         statement.close();
     }
     ///////////////////////////////////////////////////////////////////////////////
-    public void display() {
-        System.out.println("Username: " + this.username);
-        System.out.println("Username: " + this.firstname);
-        System.out.println("Username: " + this.lastname);
-        System.out.println("Email: " + this.email);
-        System.out.println("Mobile Number: " + this.mobileNumber);
-        System.out.println("Gender: " + this.gender);
-    }
     
+    ///////////////////////////////////////////////////////////////////////////
 }
