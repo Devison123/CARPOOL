@@ -11,20 +11,17 @@ public class Main {
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
             String[] menu = {
-                "\u001B[32m┌─────────────────────┐\u001B[0m",
-                "\u001B[32m│\u001B[36m         MENU        \u001B[32m│\u001B[0m",
-                "\u001B[32m├─────────────────────┤\u001B[0m",
-                "\u001B[32m│\u001B[36m 1) LOGIN            \u001B[32m│\u001B[0m",
-                "\u001B[32m│\u001B[36m 2) SIGN UP          \u001B[32m│\u001B[0m",
-                "\u001B[32m│\u001B[36m 3) EXIT             \u001B[32m│\u001B[0m",
-                "\u001B[32m└─────────────────────┘\u001B[0m"
+                    "\u001B[32m┌─────────────────────┐\u001B[0m",
+                    "\u001B[32m│\u001B[36m         MENU        \u001B[32m│\u001B[0m",
+                    "\u001B[32m├─────────────────────┤\u001B[0m",
+                    "\u001B[32m│\u001B[36m 1) LOGIN            \u001B[32m│\u001B[0m",
+                    "\u001B[32m│\u001B[36m 2) SIGN UP          \u001B[32m│\u001B[0m",
+                    "\u001B[32m│\u001B[36m 3) EXIT             \u001B[32m│\u001B[0m",
+                    "\u001B[32m└─────────────────────┘\u001B[0m"
             };
-            
 
-            
-            
             Transactions.clearAndPrintTable(menu);
-            
+
             System.out.print("Your choice : ");
             choice = Integer.parseInt(scan.nextLine());
             switch (choice) {
@@ -40,24 +37,24 @@ public class Main {
                     boolean ex = false;
                     do {
                         String[] table = new String[] {
-                            "\u001B[36m┌───────────────────────────────┐",
-                            "│           MAIN MENU           │",
-                            "├───────────────────────────────┤",
-                            "│ \u001B[32m1) BOOK A TRIP                \u001B[36m│",
-                            "│ \u001B[32m2) ADD TRIP                   \u001B[36m│",
-                            "│ \u001B[32m3) CANCEL BOOKING             \u001B[36m│",
-                            "│ \u001B[32m4) CANCEL TRIP                \u001B[36m│",
-                            "│ \u001B[32m5) EDIT ACCOUNT DETAILS       \u001B[36m│",
-                            "│ \u001B[32m6) VIEW MY TRIP               \u001B[36m│",
-                            "│ \u001B[32m7) VIEW MY BOOKING            \u001B[36m│",
-                            "│ \u001B[32m8) VIEW MY ACCOUNT            \u001B[36m│",
-                            "│ \u001B[32m9) DELETE MY ACCOUNT          \u001B[36m│",
-                            "│ \u001B[32m10) EXIT                      \u001B[36m│",
-                            "└───────────────────────────────┘\u001B[0m"
+                                "\u001B[36m┌───────────────────────────────┐",
+                                "│           MAIN MENU           │",
+                                "├───────────────────────────────┤",
+                                "│ \u001B[32m1) BOOK A TRIP                \u001B[36m│",
+                                "│ \u001B[32m2) ADD TRIP                   \u001B[36m│",
+                                "│ \u001B[32m3) CANCEL BOOKING             \u001B[36m│",
+                                "│ \u001B[32m4) CANCEL TRIP                \u001B[36m│",
+                                "│ \u001B[32m5) EDIT ACCOUNT DETAILS       \u001B[36m│",
+                                "│ \u001B[32m6) VIEW MY TRIP               \u001B[36m│",
+                                "│ \u001B[32m7) VIEW MY BOOKING            \u001B[36m│",
+                                "│ \u001B[32m8) VIEW MY ACCOUNT            \u001B[36m│",
+                                "│ \u001B[32m9) DELETE MY ACCOUNT          \u001B[36m│",
+                                "│ \u001B[32m10) EXIT                      \u001B[36m│",
+                                "└───────────────────────────────┘\u001B[0m"
                         };
-                        
+
                         Transactions.clearAndPrintTable(table);
-                        
+
                         System.out.print("Your choice : ");
                         option = Integer.parseInt(scan.nextLine());
 
@@ -109,13 +106,18 @@ public class Main {
                                 System.out.print("Enter new mobile number: ");
                                 String newMobileNumber = scan.nextLine();
 
-                                System.out.print("Enter your gender: ");
-                                String newGender = scan.nextLine();
-                                System.out.println("Press Enter to continue : ");
-                                scan.nextLine();
+                                String newgender = scan.nextLine().toUpperCase();
+                                while (!newgender.equals("M") && !newgender.equals("F")) {
+                                    System.out.println("Invalid gender, please enter 'M' or 'F'");
+                                    System.out.print("Enter gender (M/F): ");
+                                    newgender = scan.nextLine().toUpperCase();
+                                }
+
                                 User user = new User(username);
                                 user.editUser(connection, username, newfirstname, newlastname, newPassword, newEmail,
-                                        newMobileNumber, newGender);
+                                        newMobileNumber, newgender);
+                                System.out.println("Press Enter to continue : ");
+                                scan.nextLine();
                                 break;
                             case 6:
                                 // view trip
@@ -143,7 +145,7 @@ public class Main {
                                 Transactions.removeUser(connection, username);
                                 System.out.println("Press Enter to continue : ");
                                 scan.nextLine();
-                                option=10;
+                                option = 10;
                                 break;
                             case 10:
                                 // exit the program

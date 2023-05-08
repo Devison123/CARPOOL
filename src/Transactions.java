@@ -50,8 +50,12 @@ public class Transactions {
         String email = scanner.nextLine();
         System.out.print("Enter mobile number: ");
         String mobileNumber = scanner.nextLine();
-        System.out.print("Enter gender: ");
-        String gender = scanner.nextLine();
+        System.out.print("Enter gender (M/F): ");
+        String gender = scanner.nextLine().toUpperCase();
+        while (!gender.equals("M") && !gender.equals("F")) {
+        System.out.println("Invalid gender, please enter 'M' or 'F'");
+        System.out.print("Enter gender (M/F): ");
+        gender = scanner.nextLine().toUpperCase();}
         User newUser = new User(username, password, firstname, lastname, email, mobileNumber, gender);
         newUser.save(connection);
         System.out.println("Registered successfully");
@@ -66,11 +70,39 @@ public class Transactions {
         System.out.print("Enter end location: ");
         String endLocation = scanner.nextLine();
         System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
-        Timestamp startTime = Timestamp.valueOf(scanner.nextLine());
+        Timestamp startTime;
+        while (true) {
+            try {
+                startTime = Timestamp.valueOf(scanner.nextLine());
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid input, please enter a valid Timestamp in the format YYYY-MM-DD HH:MM:SS");
+            }
+        }
+
         System.out.print("Enter available seats: ");
-        int availableSeats = scanner.nextInt();
+        int availableSeats;
+        while (true) {
+            try {
+                availableSeats = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, please enter a valid integer");
+            }
+        }
+
         System.out.print("Enter luggage space (true or false): ");
-        boolean luggageSpace = scanner.nextBoolean();
+        String luggageSpaceString = scanner.nextLine().toLowerCase();
+        boolean luggageSpace = false;
+        while (!luggageSpaceString.equals("true") && !luggageSpaceString.equals("false")) {
+            System.out.println("Invalid input, please enter 'true' or 'false'");
+            System.out.print("Enter luggage space (true or false): ");
+            luggageSpaceString = scanner.nextLine().toLowerCase();
+        }
+        if (luggageSpaceString.equals("true")) {
+            luggageSpace = true;
+        }
+
         Trip newTrip = new Trip(username, carModel, startLocation, endLocation, startTime, availableSeats,
                 luggageSpace);
         newTrip.save(connection);
@@ -89,8 +121,16 @@ public class Transactions {
         String startLocation = scanner.nextLine();
         System.out.print("Enter end location: ");
         String endLocation = scanner.nextLine();
-        System.out.print("Enter the number of seats: ");
-        int numSeats = scanner.nextInt();
+        System.out.print("Enter number of seats: ");
+        int numSeats;
+        while (true) {
+            try {
+                numSeats = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, please enter a valid integer");
+            }
+        }
         scanner.nextLine();
         System.out.print("Enter date (YYYY-MM-DD, e.g. 2023-05-05): ");
         try {
@@ -118,6 +158,7 @@ public class Transactions {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
+    
     static boolean isTripListEmpty(Connection connection) throws SQLException {
         boolean isEmpty = true;
         String sql = "SELECT * FROM Trips";
@@ -150,8 +191,17 @@ public class Transactions {
         }
         Booking.displayByUsername(connection, username);
         System.out.println();
-        System.out.print("Enter the booking id you want to cancel : ");
-        int tripId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter the trip id");
+        int tripId;
+        while (true) {
+            try {
+                tripId = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input, please enter a valid integer for the trip ID");
+            }
+        }
+
         Booking.cancelBooking(connection, tripId);
         if (Booking.doesBookingExist(connection, tripId)) {
             Booking.cancelBooking(connection, tripId);
