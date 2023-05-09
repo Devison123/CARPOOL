@@ -42,7 +42,7 @@ public class Booking {
         System.out.println("\u001B[34m+----------+-----------+-----------------+-----------------+---------------------+------------+-----------+----------------+\u001B[0m");
         System.out.println("\u001B[34m| Trip ID  | Driver    | Car Model       | Start Location  | End Location        | Start Time | Booking ID | Num Seats | Booking Status |\u001B[0m");
         System.out.println("\u001B[34m+----------+-----------+-----------------+-----------------+---------------------+------------+-----------+-----------+----------------+\u001B[0m");
-    
+        
         // Print table rows
         while (resultSet.next()) {
             int tripId = resultSet.getInt("trip_id");
@@ -132,5 +132,30 @@ public class Booking {
     statement.close();
     return count > 0;
 }   
+/////////////////////////////////////////////////////////////////////////////////////////////////
+public static String[] displayBookings(Connection connection) throws SQLException { 
+    PreparedStatement statement = connection.prepareStatement("SELECT * FROM Bookings");
+    ResultSet resultSet = statement.executeQuery();
+    if (!resultSet.next()) {
+        return new String[] {"No bookings are available"};
+    }
+
+    StringBuilder output = new StringBuilder();
+    output.append("┌────────────────┬───────────────────────────┬─────────────┬───────────────────────┬─────────────────────────┐\n");
+    output.append(String.format("│ %-15s│ %-26s│ %-12s│ %-22s│ %-24s│\n", "Booking ID", "Trip ID", "Username", "Num_sets", "Booking status"));
+    output.append("├────────────────┼───────────────────────────┼─────────────┼───────────────────────┼─────────────────────────┤\n");
+
+    do {
+        int bookingId = resultSet.getInt("booking_id");
+        int tripId = resultSet.getInt("trip_id");
+        String username = resultSet.getString("username");
+        int num_seats = resultSet.getInt("num_seats");
+        String booking_status = resultSet.getString("booking_status");
+        output.append(String.format("│ %-15s│ %-26s│ %-12s│ %-22s│ %-24s│\n",bookingId, tripId, username, num_seats, booking_status ));
+    } while (resultSet.next());
+    output.append("└────────────────┴───────────────────────────┴─────────────┴───────────────────────┴─────────────────────────┘\n");
+
+    return output.toString().split("\n");
+}
     
 }

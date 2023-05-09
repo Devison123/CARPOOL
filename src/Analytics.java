@@ -5,31 +5,36 @@ public class Analytics {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void analysis() {
+        Scanner scan = new Scanner(System.in);
         Analytics analytics = new Analytics();
         boolean quit = false;
         while (!quit) {
             System.out.println("Choose an option:");
-            System.out.println("1. Percentage of cancelled bookings");
-            System.out.println("2. Percentage of cancelled trips");
-            System.out.println("3. Insights on num_seats booked");
-            System.out.println("4. Insights on users based on gender ");
-            System.out.println("5. Quit");
+            Transactions.clearAndPrintTable(Menu.analytics);
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
                     System.out.println("Cancelled Bookings percentage is "+analytics.getCancelledPercentage());
                     System.out.println();
+                    System.out.println("Press Enter to continue : ");
+                    scan.nextLine();
                     break;
                 case 2:
                     System.out.println("Cancelled trip percentage is "+analytics.getCancelledTripPercentage());
                     System.out.println();
+                    System.out.println("Press Enter to continue : ");
+                    scan.nextLine();
 
                     break;
                 case 3:
-                     analytics.displayNumSeatsHistogram() ;
+                    analytics.displayNumSeatsHistogram() ;
+                    System.out.println("Press Enter to continue : ");
+                    scan.nextLine();
                     break;
                 case 4:
                     analytics.displayGenderHistogram();
+                    System.out.println("Press Enter to continue : ");
+                    scan.nextLine();
                     break;
                 case 5:
                     quit = true;

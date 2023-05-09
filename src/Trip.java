@@ -154,8 +154,39 @@ public class Trip {
         resultSet.close();
         statement.close();
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static String[] displayTrips(Connection connection) throws SQLException { 
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM trips");
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
+                return new String[] {"No cabs are available for this route on this date."};
+            }
+    
+            StringBuilder output = new StringBuilder();
+            output.append("┌────────────┬───────────────────────┬─────────────┬───────────────────┬───────────────────┬──────────────────────┐\n");
+            output.append(String.format("│ %-11s│ %-22s│ %-12s│ %-18s│ %-18s│ %-21s│\n", "Trip ID", "User Name", "Car Model", "start_location", "end_location", "start_time","Trip_status"));
+            output.append("├────────────┼───────────────────────┼─────────────┼───────────────────┼───────────────────┼──────────────────────┤\n");
+    
+            do {
+                int tripId = resultSet.getInt("trip_id");
+                String username = resultSet.getString("username");
+                String carmodel = resultSet.getString("car_model");
+                String start_location = resultSet.getString("start_location");
+                String end_location = resultSet.getString("end_location");
+                String Trip_status = resultSet.getString("Trip_status");
+                Timestamp startTime = resultSet.getTimestamp("start_time");
+    
+                String startDateTimeStr = startTime.toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy─MM─dd HH:mm"));
+                output.append(String.format("│ %-11s│ %-22s│ %-12s│ %-18s│ %-18s│ %-21s│\n", tripId, username, carmodel, start_location, end_location, startTime,Trip_status));
+            } while (resultSet.next());
+            output.append("└────────────┴───────────────────────┴─────────────┴───────────────────┴───────────────────┴──────────────────────┘\n");
+    
+            return output.toString().split("\n");
+        }
+    }
+    
 
-}
+
 
     
     

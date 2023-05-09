@@ -35,6 +35,17 @@ public class Menu {
         "│ \u001B[32m5) EXIT                       \u001B[36m│",
         "└───────────────────────────────┘\u001B[0m"
     };
+    static String[] analytics ={
+        "\u001B[32m┌─────────────────────────────────────────┐",
+        "\u001B[32m│\u001B[36m                  MENU                   \u001B[32m│\u001B[0m",
+        "\u001B[32m├─────────────────────────────────────────┤\u001B[0m",
+        "\u001B[32m│\u001B[36m 1) Percentage of cancelled bookings     \u001B[32m│\u001B[0m",
+        "\u001B[32m│\u001B[36m 2) Percentage of cancelled trips        \u001B[32m│\u001B[0m",
+        "\u001B[32m│\u001B[36m 3) Insights on num_seats booked         \u001B[32m│\u001B[0m",
+        "\u001B[32m│\u001B[36m 4) Insights on users based on gender    \u001B[32m│\u001B[0m",
+        "\u001B[32m│\u001B[36m 5) Quit                                 \u001B[32m│\u001B[0m",
+        "\u001B[32m└─────────────────────────────────────────┘\u001B[0m"
+    };
 
 
 }

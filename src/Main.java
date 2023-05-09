@@ -136,7 +136,6 @@ public class Main {
                             z = Integer.parseInt(scan.nextLine());
                             switch (z) {
                                 case 1:
-                                    // code for booking a trip
                                     System.out.println("You chose option 1: ANALYTICS");
                                     Analytics.analysis();
                                     System.out.println("Press Enter to continue : ");
@@ -144,22 +143,21 @@ public class Main {
                                     break;
                                 case 2:
                                     // code for adding a trip
-                                    System.out.println("You chose option 2: ADD TRIP");
-                                    Transactions.addtrip(connection);
+                                    System.out.println("You chose option 2: VIEW USERS TABLE");
+                                    Transactions.clearAndPrintTable(User.users(connection));
                                     System.out.println("Press Enter to continue : ");
                                     scan.nextLine();
                                     break;
                                 case 3:
-                                    // code for cancelling a booking
-                                    System.out.println("You chose option 3: CANCEL BOOKING");
-                                    Transactions.cancelBooking(connection);
+                                    System.out.println("You chose option 3: VIEW TRIPS TABLE");
+                                    Transactions.clearAndPrintTable(Trip.displayTrips(connection));;
                                     System.out.println("Press Enter to continue : ");
                                     scan.nextLine();
                                     break;
                                 case 4:
                                     // code for cancelling a trip
-                                    System.out.println("You chose option 4: CANCEL TRIP");
-                                    Transactions.cancelTrip(connection);
+                                    System.out.println("You chose option 4: VIEW BOOKINGS TABLE");
+                                    Transactions.clearAndPrintTable(Booking.displayBookings(connection));;
                                     System.out.println("Press Enter to continue : ");
                                     scan.nextLine();
                                     break;

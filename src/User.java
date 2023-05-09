@@ -149,6 +149,51 @@ public class User {
         statement.close();
     }
     ///////////////////////////////////////////////////////////////////////////////
+    public static String[] users(Connection connection) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM Users");
+        ResultSet resultSet = statement.executeQuery();
+        String[] userDetails = null;
+        if (resultSet.next()) {
+            String username = resultSet.getString("username");
+            String password = resultSet.getString("password");
+            String firstname = resultSet.getString("firstname");
+            String lastname = resultSet.getString("lastname");
+            String email = resultSet.getString("email");
+            String mobileNumber = resultSet.getString("mobile_number");
+            String gender = resultSet.getString("gender");
+            userDetails = new String[] {username, password, firstname, lastname, email, mobileNumber, gender};
+        }
+        
+        resultSet.close();
+        statement.close();
+        
+        // construct table with borders
+        String[] table = new String[] {
+            "\u001B[36m┌─────────────┬─────────────────┐",
+            "│        USER PROFILE           │",
+            "├─────────────┼─────────────────┤",
+            "│ USERNAME    │ " + padRight(userDetails[0], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ PASSWORD    │ " + padRight("******", 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ FIRST NAME  │ " + padRight(userDetails[2], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ LAST NAME   │ " + padRight(userDetails[3], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ EMAIL       │ " + padRight(userDetails[4], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ MOBILE NO.  │ " + padRight(userDetails[5], 16) + "│",
+            "├─────────────┼─────────────────┤",
+            "│ GENDER      │ " + padRight(userDetails[6], 16) + "│",
+            "└─────────────┴─────────────────┘\u001B[0m"
+        };
+        
+        return table;
+    }
     
+    // helper method to pad string to the right with spaces
+    public static String padRight(String s, int n) {
+        return String.format("%-" + n + "s", s);
+    }
     ///////////////////////////////////////////////////////////////////////////
 }
