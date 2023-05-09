@@ -93,6 +93,14 @@ public class Analytics {
         }
     }
 
+    public static String getVerticalBars(int value) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < value; i++) {
+            sb.append("|");
+        }
+        return sb.toString();
+    }
+
 
     public void displayNumSeatsHistogram() {
         try {
@@ -109,22 +117,10 @@ public class Analytics {
                 int numSeats = rs.getInt("num_seats");
                 int numBookings = rs.getInt("num_bookings");
                 histogramData.add(numBookings);
-                System.out.println(numSeats + ": " + numBookings);
+                System.out.println(numSeats + ": " +  getVerticalBars(numBookings));
             }
     
-            // display the histogram
-            System.out.println("Histogram:");
-            for (int i = 1; i <= 10; i++) {
-                String bar = "";
-                for (int j = 0; j < histogramData.size(); j++) {
-                    if (histogramData.get(j) >= i) {
-                        bar += "|";
-                    } else {
-                        bar += " ";
-                    }
-                }
-                System.out.println(i + " |" + bar);
-            }
+            
         } catch (SQLException e) {
             // handle exception
         }
@@ -146,38 +142,16 @@ public class Analytics {
                 String gender = rs.getString("gender");
                 int numUsers = rs.getInt("num_users");
                 histogramData.add(numUsers);
-                System.out.println(gender + ": " + numUsers);
+                System.out.println(gender + ": " +  getVerticalBars(numUsers));
             }
     
-            // display the histogram
-            System.out.println("Histogram:");
-            String[] genders = {"M", "F"};
-            for (int i = 0; i < genders.length; i++) {
-                String bar = "";
-                for (int j = 0; j < histogramData.size(); j++) {
-                    if (i == 0 && genders[j].equals("M")) {
-                        bar += getHistogramBar(histogramData.get(j));
-                    } else if (i == 1 && genders[j].equals("F")) {
-                        bar += getHistogramBar(histogramData.get(j));
-                    } else {
-                        bar += " ";
-                    }
-                }
-                System.out.println(genders[i] + " |" + bar);
-            }
+            
         } catch (SQLException e) {
             // handle exception
         }
     }
     
-    private String getHistogramBar(int count) {
-        String bar = "";
-        for (int i = 0; i < count; i++) {
-            bar += "|";
-        }
-        return bar;
-    }
-    
+   
     
 
     

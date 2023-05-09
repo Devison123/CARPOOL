@@ -7,7 +7,7 @@ public class Database {
         try {
             // Connect to the database
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/carpoolApp", "root","daniel123");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/carpoolApp", "root","Devison@123");
             System.out.println("**********************************************");
         }catch (ClassNotFoundException e) {
             System.out.println("Error: Could not find database driver");
