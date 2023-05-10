@@ -49,7 +49,7 @@ public class User {
     }
     /////////////////////////////////////////////////////////////////////////////////////
     public static boolean checkUsernameExists(Connection connection, String username) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM Users WHERE username = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM Users WHERE BINARY username = ?")) {
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -61,7 +61,7 @@ public class User {
     }
     /////////////////////////////////////////////////////////////////////////////////
     public static boolean checkPassword(Connection connection, String username, String password) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM Users WHERE username = ? AND password = ?");
+        PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM Users WHERE username = ? AND BINARY password = ?");
         statement.setString(1, username);
         statement.setString(2, password);
         ResultSet resultSet = statement.executeQuery();
