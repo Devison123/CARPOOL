@@ -1,0 +1,19 @@
+-------------------------------------------------------
+                         BOOKING TICKET                
+-------------------------------------------------------
+Booking ID               : 14
+Trip ID                  : 2
+Passenger Username       : arjun
+Driver Contact Number    : 23456
+Driver Name              : subu sk
+Start Location           : pune
+End Location             : lavasa
+Start Time               : 2023-10-21 10:00:00.0
+Number of Seats Booked   : 1
+Car Model                : swift
+Booking Status           : BOOKING CONFIRMED
+
+-------------------------------------------------------
+                     THANK YOU FOR BOOKING             
+-------------------------------------------------------
+

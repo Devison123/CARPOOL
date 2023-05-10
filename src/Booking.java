@@ -131,6 +131,23 @@ public class Booking {
         
         return tripId;
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    public static int getBookingid(Connection connection) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT booking_id FROM Bookings ORDER BY booking_id DESC LIMIT 1");
+        ResultSet resultSet = statement.executeQuery();
+        
+        int booking_id;
+        if(resultSet.next()){
+            booking_id = resultSet.getInt("booking_id");
+        }else{
+            return 0;
+        }
+        resultSet.close();
+        statement.close();
+        
+        return booking_id;
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void removeByUsername(Connection connection, String username) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -179,54 +196,8 @@ public static String[] displayBookings(Connection connection) throws SQLExceptio
     return output.toString().split("\n");
 }
 
-// public void writeBookingDetailsToFile(Connection connection, String username) throws SQLException, IOException {
-//     PreparedStatement statement = connection.prepareStatement(
-//             "SELECT b.booking_id, b.trip_id, b.username, t.username AS driver_username, " +
-//             "u.mobile_number AS driver_contact_number, CONCAT(u.firstname, ' ', u.lastname) AS driver_name, " +
-//             "t.start_location, t.end_location, t.start_time, b.num_seats, t.car_model " +
-//             "FROM Bookings b " +
-//             "JOIN Trips t ON b.trip_id = t.trip_id " +
-//             "JOIN Users u ON t.username = u.username " +
-//             "WHERE b.username = ?"
-//     );
-//     statement.setString(1, username);
-//     ResultSet resultSet = statement.executeQuery();
-
-//     while (resultSet.next()) {
-//         int bookingId = resultSet.getInt("booking_id");
-//         int tripId = resultSet.getInt("trip_id");
-//         String passengerUsername = resultSet.getString("username");
-//         String driverUsername = resultSet.getString("driver_username");
-//         String driverContactNumber = resultSet.getString("driver_contact_number");
-//         String driverName = resultSet.getString("driver_name");
-//         String startLocation = resultSet.getString("start_location");
-//         String endLocation = resultSet.getString("end_location");
-//         Timestamp startTime = resultSet.getTimestamp("start_time");
-//         int numSeats = resultSet.getInt("num_seats");
-//         String carModel = resultSet.getString("car_model");
-
-//         // create file name using username and booking id
-//         String fileName = username + "_" + bookingId + ".txt";
-//         FileWriter writer = new FileWriter(fileName);
-//         writer.write("Booking ID: " + bookingId + "\n");
-//         writer.write("Trip ID: " + tripId + "\n");
-//         writer.write("Passenger Username: " + passengerUsername + "\n");
-//         writer.write("Driver Username: " + driverUsername + "\n");
-//         writer.write("Driver Contact Number: " + driverContactNumber + "\n");
-//         writer.write("Driver Name: " + driverName + "\n");
-//         writer.write("Start Location: " + startLocation + "\n");
-//         writer.write("End Location: " + endLocation + "\n");
-//         writer.write("Start Time: " + startTime.toString() + "\n");
-//         writer.write("Number of Seats Booked: " + numSeats + "\n");
-//         writer.write("Car Model: " + carModel + "\n");
-//         writer.close();
-//     }
-
-//     resultSet.close();
-//     statement.close();
-// }
 //////////////////////////////////////////////////////
-public static void writeBookingDetailsToFile(Connection connection, String username, int tripId) throws SQLException, IOException {
+public static void writeBookingDetailsToFile(Connection connection, String username, int booking_id) throws SQLException, IOException {
     PreparedStatement statement = connection.prepareStatement(
             "SELECT b.booking_id, b.trip_id, b.username, t.username AS driver_username, " +
             "u.mobile_number AS driver_contact_number, CONCAT(u.firstname, ' ', u.lastname) AS driver_name, " +
@@ -234,17 +205,15 @@ public static void writeBookingDetailsToFile(Connection connection, String usern
             "FROM Bookings b " +
             "JOIN Trips t ON b.trip_id = t.trip_id " +
             "JOIN Users u ON t.username = u.username " +
-            "WHERE b.username = ? AND b.trip_id = ?"
+            "WHERE b.username = ? AND b.booking_id = ?"
     );
     statement.setString(1, username);
-    statement.setInt(2, tripId);
+    statement.setInt(2, booking_id);
     ResultSet resultSet = statement.executeQuery();
 
     while (resultSet.next()) {
-        int bookingId = resultSet.getInt("booking_id");
         int tripIdResult = resultSet.getInt("trip_id");
         String passengerUsername = resultSet.getString("username");
-        String driverUsername = resultSet.getString("driver_username");
         String driverContactNumber = resultSet.getString("driver_contact_number");
         String driverName = resultSet.getString("driver_name");
         String startLocation = resultSet.getString("start_location");
@@ -255,32 +224,31 @@ public static void writeBookingDetailsToFile(Connection connection, String usern
         String status = resultSet.getString("booking_status");
 
         // create file name using username and booking id
-        String fileName = "Tickets/" + username + "_" + bookingId + ".txt";
+        String fileName = "Tickets/" + username + "_" + booking_id + ".txt";
         FileWriter writer = new FileWriter(fileName);
         BufferedWriter bw = new BufferedWriter(writer);
 
         // print header and booking details
-        bw.write("--------------------------------------------------\n");
-        bw.write("                     BOOKING TICKET                \n");
-        bw.write("--------------------------------------------------\n");
-        bw.write(String.format("%-20s: %d\n", "Booking ID", bookingId));
-        bw.write(String.format("%-20s: %d\n", "Trip ID", tripIdResult));
-        bw.write(String.format("%-20s: %s\n", "Passenger Username", passengerUsername));
-        bw.write(String.format("%-20s: %s\n", "Driver Username", driverUsername));
-        bw.write(String.format("%-20s: %s\n", "Driver Contact Number", driverContactNumber));
-        bw.write(String.format("%-20s: %s\n", "Driver Name", driverName));
-        bw.write(String.format("%-20s: %s\n", "Start Location", startLocation));
-        bw.write(String.format("%-20s: %s\n", "End Location", endLocation));
-        bw.write(String.format("%-20s: %s\n", "Start Time", startTime.toString()));
-        bw.write(String.format("%-20s: %d\n", "Number of Seats Booked", numSeats));
-        bw.write(String.format("%-20s: %s\n", "Car Model", carModel));
-        bw.write(String.format("%-20s: %s\n", "Booking Status", status));
+        bw.write("-------------------------------------------------------\n");
+        bw.write("                         BOOKING TICKET                \n");
+        bw.write("-------------------------------------------------------\n");
+        bw.write(String.format("%-25s: %d\n", "Booking ID", booking_id));
+        bw.write(String.format("%-25s: %d\n", "Trip ID", tripIdResult));
+        bw.write(String.format("%-25s: %s\n", "Passenger Username", passengerUsername));
+        bw.write(String.format("%-25s: %s\n", "Driver Contact Number", driverContactNumber));
+        bw.write(String.format("%-25s: %s\n", "Driver Name", driverName));
+        bw.write(String.format("%-25s: %s\n", "Start Location", startLocation));
+        bw.write(String.format("%-25s: %s\n", "End Location", endLocation));
+        bw.write(String.format("%-25s: %s\n", "Start Time", startTime.toString()));
+        bw.write(String.format("%-25s: %d\n", "Number of Seats Booked", numSeats));
+        bw.write(String.format("%-25s: %s\n", "Car Model", carModel));
+        bw.write(String.format("%-25s: %s\n", "Booking Status", status));
 
         // beautify the output
         bw.write("\n");
-        bw.write("--------------------------------------------------\n");
-        bw.write("                 THANK YOU FOR BOOKING             \n");
-        bw.write("--------------------------------------------------\n");
+        bw.write("-------------------------------------------------------\n");
+        bw.write("                     THANK YOU FOR BOOKING             \n");
+        bw.write("-------------------------------------------------------\n");
         bw.write("\n");
 
         bw.close();

@@ -31,6 +31,7 @@ public class Main {
                     if (loggedin==0) {
                         System.out.println("\nTry again / Try registering");
                         break;
+                       
                     }
                     else if(loggedin==1){
                         int option;

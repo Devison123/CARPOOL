@@ -26,6 +26,8 @@ public class Transactions {
                 }
             }
             System.out.print("Username does not exists");
+            System.out.println("\npress Enter to continue");
+            scanner.nextLine();
             return 0;
         } else {
             System.out.print("Enter password: ");
@@ -141,7 +143,6 @@ public class Transactions {
                 System.out.println("Invalid input, please enter a valid integer");
             }
         }
-        scanner.nextLine();
         System.out.print("Enter date (YYYY-MM-DD, e.g. 2023-05-05): ");
         try {
             String input = scanner.nextLine();
@@ -163,7 +164,7 @@ public class Transactions {
             Booking book = new Booking(tripId, username, numSeats);
             book.save(connection);
             Trip.updateSeats(connection, tripId, numSeats, false);
-            Booking.writeBookingDetailsToFile(connection, username,tripId);
+            Booking.writeBookingDetailsToFile(connection, username,Booking.getBookingid(connection));
             }
         }
         } catch (DateTimeParseException e) {
