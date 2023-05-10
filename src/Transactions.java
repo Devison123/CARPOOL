@@ -19,9 +19,13 @@ public class Transactions {
                 String password = scanner.nextLine();
                 if(Admin.checkPassword(connection, username, password)){
                     System.out.println("Welcome admin");
+                    System.out.println("\npress Enter to continue");
+                    scanner.nextLine();
                     return 2;
                 }else {
                     System.out.println("INCORRECT PASSWORD");
+                    System.out.println("\npress Enter to continue");
+                    scanner.nextLine();
                     return 0;
                 }
             }
@@ -37,6 +41,8 @@ public class Transactions {
                 return 1;
             } else {
                 System.out.println("INCORRECT PASSWORD");
+                System.out.println("\npress Enter to continue");
+                scanner.nextLine();
                 return 0;
             }
         }
@@ -52,6 +58,8 @@ public class Transactions {
                 break;
             }
             System.out.println("Username already exists, try again");
+            System.out.println("\npress Enter to continue");
+            scanner.nextLine();
         }
         System.out.print("Enter firstname: ");
         String firstname = scanner.nextLine();
@@ -72,6 +80,8 @@ public class Transactions {
         User newUser = new User(username, password, firstname, lastname, email, mobileNumber, gender);
         newUser.save(connection);
         System.out.println("Registered successfully");
+        System.out.println("\npress Enter to continue");
+        scanner.nextLine();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +111,8 @@ public class Transactions {
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, please enter a valid integer");
+                System.out.println("\npress Enter to continue");
+                scanner.nextLine();
             }
         }
 
@@ -120,6 +132,8 @@ public class Transactions {
                 luggageSpace);
         newTrip.save(connection);
         System.out.println("New trip created");
+        System.out.println("\npress Enter to continue");
+        scanner.nextLine();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +155,8 @@ public class Transactions {
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input, please enter a valid integer");
+                System.out.println("\npress Enter to continue");
+                scanner.nextLine();
             }
         }
         System.out.print("Enter date (YYYY-MM-DD, e.g. 2023-05-05): ");
@@ -152,9 +168,9 @@ public class Transactions {
             System.out.println("Input date : " + dateString);      
             clearAndPrintTable(Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
             username));
-            System.out.println("Enter return to choose trip or enter E to exit : ");
+            System.out.println("Enter c to choose trip or enter return to exit : ");
             String z = scanner.nextLine();
-            if(z.equalsIgnoreCase("e")){
+            if(z.equalsIgnoreCase("c")){
                 return;
             }else{
             if(Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
@@ -169,6 +185,8 @@ public class Transactions {
         }
         } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please enter a valid date in YYYY-MM-DD format.");
+            System.out.println("\npress Enter to continue");
+            scanner.nextLine();
             return;
         }
     }
@@ -196,6 +214,8 @@ public class Transactions {
         if (Booking.doesBookingExist(connection, tripId)) {
             Booking.cancelBooking(connection, tripId);
         }
+        System.out.println("\npress Enter to continue");
+        scanner.nextLine();
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -240,6 +260,8 @@ public class Transactions {
             User.delete(connection, username);
         } else {
             System.out.println("INCORRECT PASSWORD");
+            System.out.println("\npress Enter to continue");
+            scanner.nextLine();
         }
 
     }
