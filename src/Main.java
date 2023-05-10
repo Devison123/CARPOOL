@@ -1,8 +1,9 @@
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         Connection connection = Database.connect();
         Scanner scan = new Scanner(System.in);
         String username;
@@ -11,8 +12,18 @@ public class Main {
         do {
             System.out.println("**** WELCOME TO CARPOOL ****");
             Transactions.clearAndPrintTable(Menu.mainMenu);
-            System.out.print("Your choice : ");
-            choice = Integer.parseInt(scan.nextLine());
+            boolean validInput = false;
+
+            while (!validInput) {
+                System.out.print("Your choice: ");
+                String input = scan.nextLine();
+                try {
+                    choice = Integer.parseInt(input);
+                    validInput = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter an integer.");
+                }
+            }
             switch (choice) {
                 case 1:
                     loggedin = Transactions.login(connection);
