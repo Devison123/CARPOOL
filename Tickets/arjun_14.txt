@@ -1,5 +1,5 @@
 -------------------------------------------------------
-                         BOOKING TICKET                
+                    BOOKING TICKET                
 -------------------------------------------------------
 Booking ID               : 14
 Trip ID                  : 2
@@ -14,6 +14,6 @@ Car Model                : swift
 Booking Status           : BOOKING CONFIRMED
 
 -------------------------------------------------------
-                     THANK YOU FOR BOOKING             
+                THANK YOU FOR BOOKING             
 -------------------------------------------------------
 

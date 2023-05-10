@@ -230,7 +230,7 @@ public static void writeBookingDetailsToFile(Connection connection, String usern
 
         // print header and booking details
         bw.write("-------------------------------------------------------\n");
-        bw.write("                         BOOKING TICKET                \n");
+        bw.write("                    BOOKING TICKET                \n");
         bw.write("-------------------------------------------------------\n");
         bw.write(String.format("%-25s: %d\n", "Booking ID", booking_id));
         bw.write(String.format("%-25s: %d\n", "Trip ID", tripIdResult));

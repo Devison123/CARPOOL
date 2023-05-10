@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 public class User {
 
     private String username;
@@ -112,11 +114,6 @@ public class User {
         
         return table;
     }
-    
-    // helper method to pad string to the right with spaces
-    public static String padRight(String s, int n) {
-        return String.format("%-" + n + "s", s);
-    }
     //////////////////////////////////////////////////////////////////////////////
     public void editUser(Connection connection,String username,String newfirstname,String newlastname, String newPassword, String newEmail, String newMobileNumber, String newGender) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(
@@ -152,48 +149,35 @@ public class User {
     public static String[] users(Connection connection) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM Users");
         ResultSet resultSet = statement.executeQuery();
-        String[] userDetails = null;
-        if (resultSet.next()) {
-            String username = resultSet.getString("username");
-            String password = resultSet.getString("password");
-            String firstname = resultSet.getString("firstname");
-            String lastname = resultSet.getString("lastname");
-            String email = resultSet.getString("email");
-            String mobileNumber = resultSet.getString("mobile_number");
-            String gender = resultSet.getString("gender");
-            userDetails = new String[] {username, password, firstname, lastname, email, mobileNumber, gender};
+        List<String> table = new ArrayList<>();
+        table.add("\u001B[36m┌─────────────┬─────────────────┬──────────────┬──────────────┬────────────────┬─────────────────┬────────────┐");
+        table.add("│ USERNAME    │ PASSWORD        │ FIRST NAME   │ LAST NAME    │ EMAIL          │ MOBILE NO.      │ GENDER     │");
+        table.add("├─────────────┼─────────────────┼──────────────┼──────────────┼────────────────┼─────────────────┼────────────┤");
+        while (resultSet.next()) {
+            String[] userDetails = new String[7];
+            userDetails[0] = resultSet.getString("username");
+            userDetails[1] = "******";
+            userDetails[2] = resultSet.getString("firstname");
+            userDetails[3] = resultSet.getString("lastname");
+            userDetails[4] = resultSet.getString("email");
+            userDetails[5] = resultSet.getString("mobile_number");
+            userDetails[6] = resultSet.getString("gender");
+                table.add("│ " + padRight(userDetails[0], 11) + " │ " + padRight(userDetails[1], 15) + " │ " + padRight(userDetails[2], 12) + " │ " + padRight(userDetails[3], 12) + " │ " + padRight(userDetails[4], 14) + " │ " + padRight(userDetails[5], 15) + " │ " + padRight(userDetails[6], 10) + " │");
         }
-        
+    
         resultSet.close();
         statement.close();
-        
+    
         // construct table with borders
-        String[] table = new String[] {
-            "\u001B[36m┌─────────────┬─────────────────┐",
-            "│        USER PROFILE           │",
-            "├─────────────┼─────────────────┤",
-            "│ USERNAME    │ " + padRight(userDetails[0], 16) + "│",
-            "├─────────────┼─────────────────┤",
-            "│ PASSWORD    │ " + padRight("******", 16) + "│",
-            "├─────────────┼─────────────────┤",
-            "│ FIRST NAME  │ " + padRight(userDetails[2], 16) + "│",
-            "├─────────────┼─────────────────┤",
-            "│ LAST NAME   │ " + padRight(userDetails[3], 16) + "│",
-            "├─────────────┼─────────────────┤",
-            "│ EMAIL       │ " + padRight(userDetails[4], 16) + "│",
-            "├─────────────┼─────────────────┤",
-            "│ MOBILE NO.  │ " + padRight(userDetails[5], 16) + "│",
-            "├─────────────┼─────────────────┤",
-            "│ GENDER      │ " + padRight(userDetails[6], 16) + "│",
-            "└─────────────┴─────────────────┘\u001B[0m"
-        };
         
-        return table;
+        table.add("└─────────────┴─────────────────┴──────────────┴──────────────┴────────────────┴─────────────────┴────────────┘\u001B[0m");
+    
+        return table.toArray(new String[0]);
     }
     
-    // helper method to pad string to the right with spaces
     public static String padRight(String s, int n) {
         return String.format("%-" + n + "s", s);
     }
+    
     ///////////////////////////////////////////////////////////////////////////
 }
