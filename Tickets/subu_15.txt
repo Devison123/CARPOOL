@@ -1,0 +1,19 @@
+-------------------------------------------------------
+                    BOOKING TICKET                
+-------------------------------------------------------
+Booking ID               : 15
+Trip ID                  : 3
+Passenger Username       : subu
+Driver Contact Number    : 234422
+Driver Name              : arjun krizz
+Start Location           : pune
+End Location             : lavasa
+Start Time               : 2023-05-05 12:00:00.0
+Number of Seats Booked   : 1
+Car Model                : ertiga
+Booking Status           : BOOKING CONFIRMED
+
+-------------------------------------------------------
+                     THANK YOU FOR BOOKING             
+-------------------------------------------------------
+

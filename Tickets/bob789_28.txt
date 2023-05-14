@@ -1,0 +1,18 @@
+-------------------------------------------------------
+                    BOOKING TICKET                
+-------------------------------------------------------
+Booking ID               : 28
+Trip ID                  : 8
+Passenger Username       : bob789
+Driver Contact Number    : 2223334444
+Driver Name              : Lisa Jackson
+Start Location           : Pune
+End Location             : Lavasa
+Start Time               : 2023-05-10 10:00:00.0
+Number of Seats Booked   : 2
+Car Model                : Toyota Innova
+Booking Status           : BOOKING CONFIRMED
+
+-------------------------------------------------------
+                     THANK YOU FOR BOOKING             
+-------------------------------------------------------

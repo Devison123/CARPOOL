@@ -4,6 +4,8 @@ The Carpool Application is a Java-based terminal application that allows users t
 
 ## Features
 - User authentication and registration
+
+![alt text](Screenshots/register.png)
 - Create and join carpools
 - Search for carpools based on location, date, time, and other preferences
 - View information about available carpools, including driver information and car details

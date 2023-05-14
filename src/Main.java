@@ -86,10 +86,10 @@ public class Main {
 
                                 System.out.print("Enter new mobile number: ");
                                 String newMobileNumber = scan.nextLine();
-
+                                System.out.print("Enter your gender 'M' or 'F' :+");
                                 String newgender = scan.nextLine().toUpperCase();
                                 while (!newgender.equals("M") && !newgender.equals("F")) {
-                                    System.out.println("Invalid gender, please enter 'M' or 'F'");
+                                    System.out.println("Invalid gender, please enter 'M' or 'F': ");
                                     System.out.print("Enter gender (M/F): ");
                                     newgender = scan.nextLine().toUpperCase();
                                 }

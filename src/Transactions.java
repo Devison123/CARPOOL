@@ -90,7 +90,7 @@ public class Transactions {
         String carModel = scanner.nextLine();
         System.out.print("Enter start location: ");
         String startLocation = scanner.nextLine();
-        System.out.print("Enter end location: ");
+        System.out.print("Enter end location : ");
         String endLocation = scanner.nextLine();
         System.out.print("Enter start time (YYYY-MM-DD HH:MM:SS): ");
         Timestamp startTime;
@@ -170,7 +170,7 @@ public class Transactions {
             username));
             System.out.println("Enter c to choose trip or enter return to exit : ");
             String z = scanner.nextLine();
-            if(z.equalsIgnoreCase("c")){
+            if(!z.equalsIgnoreCase("c")){
                 return;
             }else{
             if(Trip.displayByLocations(connection, startLocation, endLocation, numSeats, dateString,
@@ -208,7 +208,7 @@ public class Transactions {
     /////////////////////////////////////////////////////////////////////////////////
     static void cancelTrip(Connection connection) throws SQLException {
         Trip.displayByUsername(connection, username);
-        System.out.print("Enter the trip id you want to cancel");
+        System.out.print("Enter the trip id you want to cancel :");
         int tripId = Integer.parseInt(scanner.nextLine());
         Trip.cancelTrip(connection, tripId);
         if (Booking.doesBookingExist(connection, tripId)) {
@@ -252,7 +252,7 @@ public class Transactions {
 
     /////////////////////////////////////////////////////////////////////
     static void removeUser(Connection connection, String username) throws SQLException {
-        System.out.print("Are you sure you want to delete your account!\nPlese enter your password to confirm.");
+        System.out.print("Are you sure you want to delete your account!\nPlese enter your password to confirm. :");
         String password = scanner.nextLine();
         if (User.checkPassword(connection, username, password)) {
             Trip.delete(connection, username);
